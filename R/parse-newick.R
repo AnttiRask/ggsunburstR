@@ -6,10 +6,10 @@
 # Delegates to ape::read.tree() for the actual parsing, then converts
 # the ape::phylo object to our internal list structure.
 parse_newick <- function(input) {
-  # Determine if input is a file or a string
   # ape::read.tree() may warn (e.g., "no semicolon found") then return NULL,
-
-  # or it may error. We catch both and convert to an informative abort().
+  # or it may error. We capture warnings so we can re-emit them after a
+  # successful parse, but suppress them on failure (where we abort instead).
+  captured_warnings <- list()
   phylo <- tryCatch(
     withCallingHandlers(
       {
@@ -20,6 +20,7 @@ parse_newick <- function(input) {
         }
       },
       warning = function(w) {
+        captured_warnings[[length(captured_warnings) + 1L]] <<- w
         invokeRestart("muffleWarning")
       }
     ),
@@ -37,6 +38,11 @@ parse_newick <- function(input) {
       "Failed to parse Newick input.",
       i = "Check that the input is valid Newick format."
     )
+  }
+
+  # Re-emit any warnings from ape on successful parse
+  for (w in captured_warnings) {
+    warn(conditionMessage(w))
   }
 
   phylo_to_tree(phylo)
