@@ -37,10 +37,13 @@ add_child <- function(tree, parent_id, name, dist = 1.0, extra = list()) {
   tree$parent[new_id]     <- parent_id
   tree$children[[parent_id]] <- c(tree$children[[parent_id]], new_id)
 
-  # Parent is no longer a leaf
+  # If parent was a leaf, it no longer is — adjust tip count
+  if (tree$nodes[[parent_id]]$is_leaf) {
+    tree$n_tips <- tree$n_tips - 1L
+  }
   tree$nodes[[parent_id]]$is_leaf <- FALSE
 
-  # Update tip count
+  # New child is a leaf
   tree$n_tips <- tree$n_tips + 1L
 
   structure(new_id, tree = tree)

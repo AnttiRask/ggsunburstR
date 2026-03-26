@@ -57,6 +57,22 @@ test_that("add_child() adds multiple children correctly", {
   expect_true(tree$nodes[[3]]$is_leaf)
 })
 
+test_that("add_child() n_tips is accurate for multi-level tree", {
+  # root → A → (a1, a2) — only a1 and a2 are leaves, not A
+  tree <- new_tree()
+  id_a <- add_child(tree, 1L, "A")
+  tree <- attr(id_a, "tree")
+  expect_equal(tree$n_tips, 1L)  # A is a leaf at this point
+
+  id_a1 <- add_child(tree, 2L, "a1")
+  tree <- attr(id_a1, "tree")
+  expect_equal(tree$n_tips, 1L)  # A became internal, a1 is leaf
+
+  id_a2 <- add_child(tree, 2L, "a2")
+  tree <- attr(id_a2, "tree")
+  expect_equal(tree$n_tips, 2L)  # a1 and a2 are leaves
+})
+
 test_that("add_child() carries extra attributes", {
   tree <- new_tree()
   id <- add_child(tree, 1L, "A", extra = list(colour = "red", size = "10"))
