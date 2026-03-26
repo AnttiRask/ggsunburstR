@@ -11,9 +11,10 @@ test_that("parse_newick() parses simple tree with 3 leaves", {
   expect_equal(sort(leaf_names), c("A", "B", "C"))
 })
 
-test_that("parse_newick() sets root parent to NA", {
+test_that("parse_newick() sets root parent to NA and root dist to 0", {
   tree <- parse_newick("(A, B, C);")
   expect_true(is.na(tree$parent[tree$root]))
+  expect_equal(tree$nodes[[tree$root]]$dist, 0.0)
 })
 
 # --- Nested tree ---
@@ -86,6 +87,13 @@ test_that("parse_newick() reads from file", {
   expect_equal(tree$n_tips, 3L)
 })
 
+test_that("parse_newick() reads inst/extdata/example.nw", {
+  nw_path <- system.file("extdata", "example.nw", package = "ggsunburstR")
+  skip_if(nw_path == "", message = "example.nw not installed")
+  tree <- parse_newick(nw_path)
+  expect_equal(tree$n_tips, 10L)
+})
+
 # --- Error handling ---
 
 test_that("parse_newick() errors on invalid Newick string", {
@@ -94,6 +102,18 @@ test_that("parse_newick() errors on invalid Newick string", {
 
 test_that("parse_newick() errors on empty string", {
   expect_error(parse_newick(""), class = "rlang_error")
+})
+
+# --- Single-leaf tree ---
+
+test_that("parse_newick() handles single-leaf tree", {
+  # "(A);" is a cleaner single-leaf Newick than "A;" (which ape
+  # interprets as a root label, not a tip label).
+  tree <- parse_newick("(A);")
+  expect_equal(tree$n_tips, 1L)
+  leaves <- get_leaves(tree, tree$root)
+  expect_equal(length(leaves), 1)
+  expect_equal(tree$nodes[[leaves[1]]]$name, "A")
 })
 
 # --- Multifurcating tree ---
