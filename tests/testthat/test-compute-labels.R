@@ -12,13 +12,12 @@ compute_labels_test <- function(nw, values = NULL, xlim = 360, rot = 0) {
 
 # --- Leaf label y at outer edge ---
 
-test_that("leaf label y equals ymax (outer edge)", {
+test_that("leaf label y equals ymax (outer edge per SPEC.md §2.4.1)", {
   labels <- compute_labels_test("(a, b, c);")
   leaf_ids <- which(vapply(labels$leaf_labels, function(l) !is.null(l),
                            logical(1)))
   for (lid in leaf_ids) {
-    # y_out should equal the rect's ymax (= 0.0 for farthest leaves)
-    expect_equal(labels$leaf_labels[[lid]]$y_out, 0.0)
+    expect_equal(labels$leaf_labels[[lid]]$y, 0.0)
   }
 })
 
@@ -91,6 +90,41 @@ test_that("every leaf gets a label entry", {
   leaf_ids <- which(vapply(labels$leaf_labels, function(l) !is.null(l),
                            logical(1)))
   expect_equal(length(leaf_ids), 3)
+})
+
+# --- Integration: left-side labels get flipped angles and hjust = 1 ---
+
+test_that("labels on left side (cos < 0) have rhjust = 1 and flipped rangle", {
+  # With many leaves spread across 360°, some will land on the left side.
+  # Use 8 leaves so we get good coverage of the angle range.
+  labels <- compute_labels_test("(a, b, c, d, e, f, g, h);")
+  leaf_ids <- which(vapply(labels$leaf_labels, function(l) !is.null(l),
+                           logical(1)))
+
+  found_left <- FALSE
+  found_right <- FALSE
+  for (lid in leaf_ids) {
+    l <- labels$leaf_labels[[lid]]
+    base <- l$angle
+    cos_val <- cos(base * pi / 180)
+    if (cos_val < 0) {
+      # Left side: rhjust must be 1, rangle must be base + 180
+      expect_equal(l$rhjust, 1, info = paste("leaf", lid, "base_angle", base))
+      expect_equal(l$rangle, base + 180,
+                   info = paste("leaf", lid, "base_angle", base))
+      found_left <- TRUE
+    } else {
+      # Right side: rhjust must be 0, rangle must be base
+      expect_equal(l$rhjust, 0, info = paste("leaf", lid, "base_angle", base))
+      expect_equal(l$rangle, base,
+                   info = paste("leaf", lid, "base_angle", base))
+      found_right <- TRUE
+    }
+  }
+  # Ensure we actually tested both sides
+
+  expect_true(found_left, info = "No labels on left side — test is incomplete")
+  expect_true(found_right, info = "No labels on right side — test is incomplete")
 })
 
 # --- Rotation offset ---
