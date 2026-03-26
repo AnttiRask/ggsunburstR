@@ -36,8 +36,8 @@ compute_label_positions <- function(rects, tree, xlim = 360,
         rhjust  = hjust_rtext(base_angle),
         pvjust  = vjust_ptext(base_angle),
         x       = r$x,
-        y       = r$ymin + (r$ymax - r$ymin) / 2,
-        y_out   = r$ymax
+        y       = r$ymax,  # outer edge per SPEC.md §2.4.1
+        y_mid   = r$ymin + (r$ymax - r$ymin) / 2
       )
     } else {
       node_labels[[nid]] <- list(
