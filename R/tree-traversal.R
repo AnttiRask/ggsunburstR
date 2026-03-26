@@ -3,14 +3,13 @@
 # Not exported. Used by coordinate computation and parsers.
 
 # Get all descendant IDs of a node in the specified traversal order.
-# Includes the start node itself.
+# Always includes the start node itself.
 get_descendants <- function(tree, node_id, order = "postorder") {
+  order <- rlang::arg_match(order, c("postorder", "levelorder"))
   if (order == "postorder") {
     descendants_postorder(tree, node_id)
-  } else if (order == "levelorder") {
-    descendants_levelorder(tree, node_id)
   } else {
-    descendants_postorder(tree, node_id)
+    descendants_levelorder(tree, node_id)
   }
 }
 
@@ -23,11 +22,11 @@ descendants_postorder <- function(tree, node_id) {
   c(result, node_id)
 }
 
-# Levelorder: breadth-first from node's children.
-# Does NOT include the start node — returns children, grandchildren, etc.
+# Levelorder: breadth-first, starting with node_id itself.
+# Includes the start node as the first element.
 descendants_levelorder <- function(tree, node_id) {
   result <- integer(0)
-  queue <- tree$children[[node_id]]
+  queue <- node_id
   while (length(queue) > 0) {
     current <- queue[1]
     queue <- queue[-1]

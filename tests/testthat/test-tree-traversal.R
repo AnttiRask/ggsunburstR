@@ -30,14 +30,19 @@ test_that("postorder visits children before parents", {
 
 # --- get_descendants() levelorder ---
 
-test_that("levelorder visits level by level (excluding start node)", {
+test_that("levelorder includes start node and visits level by level", {
   tree <- build_test_tree()
   desc <- get_descendants(tree, 1L, "levelorder")
-  # Level 1: A(2), B(3) — level 2: a1(4), a2(5)
-  # Root itself is excluded from levelorder
-  expect_equal(desc[1:2], c(2L, 3L))
-  expect_true(all(c(4L, 5L) %in% desc[3:4]))
-  expect_equal(length(desc), 4)
+  # Level 0: root(1) — level 1: A(2), B(3) — level 2: a1(4), a2(5)
+  expect_equal(desc[1], 1L)
+  expect_equal(desc[2:3], c(2L, 3L))
+  expect_true(all(c(4L, 5L) %in% desc[4:5]))
+  expect_equal(length(desc), 5)
+})
+
+test_that("get_descendants() errors on invalid order", {
+  tree <- build_test_tree()
+  expect_error(get_descendants(tree, 1L, "invalid"), class = "rlang_error")
 })
 
 # --- get_leaves() ---
@@ -85,6 +90,24 @@ test_that("get_farthest_node() finds the leaf with max distance", {
   farthest <- get_farthest_node(tree)
   expect_equal(farthest$node, 3L)  # B
   expect_equal(farthest$dist, 3.0)
+})
+
+# --- Edge cases: root-only tree ---
+
+test_that("get_leaves() on root-only tree returns root", {
+  tree <- new_tree()
+  # Root has no children, so it is technically a leaf
+  expect_equal(get_leaves(tree, 1L), 1L)
+})
+
+test_that("get_descendants() postorder on root-only tree returns root", {
+  tree <- new_tree()
+  expect_equal(get_descendants(tree, 1L, "postorder"), 1L)
+})
+
+test_that("get_descendants() levelorder on root-only tree returns root", {
+  tree <- new_tree()
+  expect_equal(get_descendants(tree, 1L, "levelorder"), 1L)
 })
 
 test_that("get_farthest_node() handles deep tree", {
