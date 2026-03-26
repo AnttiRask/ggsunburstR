@@ -16,3 +16,4 @@
 ^test_pure_r\.R$
 ^\.claude$
 ^CLAUDE\.md$
+^reviews$
