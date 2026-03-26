@@ -1,0 +1,24 @@
+url: https://anttirask.github.io/ggsunburstR/
+
+template:
+  bootstrap: 5
+
+reference:
+  - title: "Data preparation"
+    desc: "Parse hierarchical data and compute coordinates"
+    contents:
+      - sunburst_data
+
+  - title: "Plot functions"
+    desc: "Create sunburst and icicle plots"
+    contents:
+      - sunburst
+      - icicle
+
+  - title: "S3 methods"
+    desc: "Methods for sunburst_data objects"
+    contents:
+      - "$.sunburst_data"
+      - print.sunburst_data
+      - as.data.frame.sunburst_data
+      - plot.sunburst_data
