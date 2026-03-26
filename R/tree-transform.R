@@ -48,7 +48,9 @@ convert_to_ultrametric <- function(tree) {
   node_dist_from_root <- numeric(length(tree$nodes))
   node_dist_from_root[tree$root] <- 0.0
 
-  for (nid in descendants_levelorder(tree, tree$root)) {
+  # Skip root (first element) — its dist is always 0 and it has no parent.
+  level_nodes <- descendants_levelorder(tree, tree$root)[-1]
+  for (nid in level_nodes) {
     par <- tree$parent[nid]
     tree$nodes[[nid]]$dist <-
       (tree_len - node_dist_from_root[par]) / max_depth[nid]

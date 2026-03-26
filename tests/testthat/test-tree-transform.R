@@ -68,6 +68,37 @@ test_that("convert_to_ultrametric() makes all leaves equidistant", {
   expect_equal(dist_leaf1, dist_b, tolerance = 1e-10)
 })
 
+test_that("convert_to_ultrametric() preserves tree length (max distance)", {
+  tree <- new_tree()
+  id_a <- add_child(tree, 1L, "A", dist = 1.0)
+  tree <- attr(id_a, "tree")
+  id_leaf <- add_child(tree, 2L, "leaf1", dist = 1.0)
+  tree <- attr(id_leaf, "tree")
+  id_b <- add_child(tree, 1L, "B", dist = 3.0)
+  tree <- attr(id_b, "tree")
+
+  original_max <- get_farthest_node(tree)$dist
+  result <- convert_to_ultrametric(tree)
+  new_max <- get_farthest_node(result)$dist
+
+  expect_equal(new_max, original_max, tolerance = 1e-10)
+})
+
+test_that("convert_to_ultrametric() on already-ultrametric tree is a no-op", {
+  # Both leaves at distance 2.0 from root
+  tree <- new_tree()
+  id_a <- add_child(tree, 1L, "A", dist = 2.0)
+  tree <- attr(id_a, "tree")
+  id_b <- add_child(tree, 1L, "B", dist = 2.0)
+  tree <- attr(id_b, "tree")
+
+  result <- convert_to_ultrametric(tree)
+  dist_a <- get_distance_to_root(result, 2L)
+  dist_b <- get_distance_to_root(result, 3L)
+  expect_equal(dist_a, dist_b, tolerance = 1e-10)
+  expect_equal(dist_a, 2.0, tolerance = 1e-10)
+})
+
 test_that("convert_to_ultrametric() preserves tree structure", {
   tree <- new_tree()
   id_a <- add_child(tree, 1L, "A", dist = 2.0)
