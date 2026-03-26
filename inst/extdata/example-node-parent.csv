@@ -1,0 +1,7 @@
+node,parent,colour
+root,,grey
+A,root,red
+B,root,blue
+a1,A,red
+a2,A,red
+b1,B,blue
