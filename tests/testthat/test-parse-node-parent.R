@@ -23,6 +23,7 @@ test_that("parse_node_parent() parses basic CSV", {
   leaves <- get_leaves(tree, tree$root)
   leaf_names <- vapply(leaves, function(l) tree$nodes[[l]]$name, character(1))
   expect_equal(sort(leaf_names), c("B", "a1", "a2"))
+  expect_equal(tree$n_tips, 3L)
 })
 
 # --- Extra columns ---
@@ -84,4 +85,14 @@ test_that("parse_node_parent() handles empty parent as root", {
   tree <- parse_node_parent(f)
   a_id <- find_node_by_name(tree, "A")
   expect_false(is.null(a_id))
+})
+
+# --- Fixture file ---
+
+test_that("parse_node_parent() reads inst/extdata/example-node-parent.csv", {
+  f <- system.file("extdata", "example-node-parent.csv",
+                    package = "ggsunburstR")
+  skip_if(f == "", message = "example-node-parent.csv not installed")
+  tree <- parse_node_parent(f)
+  expect_equal(tree$n_tips, 3L)  # a1, a2, b1
 })

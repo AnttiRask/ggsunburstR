@@ -17,6 +17,7 @@ test_that("parse_lineage() parses basic 3-line file", {
   leaves <- get_leaves(tree, tree$root)
   leaf_names <- vapply(leaves, function(l) tree$nodes[[l]]$name, character(1))
   expect_equal(sort(leaf_names), c("C", "D", "E"))
+  expect_equal(tree$n_tips, 3L)
 })
 
 # --- Shared prefixes ---
@@ -75,4 +76,13 @@ test_that("parse_lineage() supports custom separator", {
   leaves <- get_leaves(tree, tree$root)
   leaf_names <- vapply(leaves, function(l) tree$nodes[[l]]$name, character(1))
   expect_equal(sort(leaf_names), c("C", "D"))
+})
+
+# --- Fixture file ---
+
+test_that("parse_lineage() reads inst/extdata/example-lineage.tsv", {
+  f <- system.file("extdata", "example-lineage.tsv", package = "ggsunburstR")
+  skip_if(f == "", message = "example-lineage.tsv not installed")
+  tree <- parse_lineage(f)
+  expect_equal(tree$n_tips, 3L)
 })
