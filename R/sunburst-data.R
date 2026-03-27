@@ -6,9 +6,10 @@
 #' suitable for rendering with `sunburst()` or `icicle()`.
 #'
 #' @param input Hierarchical data. One of: Newick string, file path,
-#'   data.frame with parent-child columns.
-#' @param type Input type. One of `"auto"`, `"newick"`, `"lineage"`,
-#'   `"node_parent"`, `"dataframe"`. Auto-detection is recommended.
+#'   data.frame with parent-child columns, or an `ape::phylo` object.
+#' @param type Input type. One of `"auto"`, `"newick"`, `"phylo"`,
+#'   `"lineage"`, `"node_parent"`, `"dataframe"`. Auto-detection is
+#'   recommended.
 #' @param values Column name (character, for data.frame input) or named
 #'   numeric vector mapping node names to values for sector sizing.
 #'   `NULL` for equal weight.
@@ -61,6 +62,7 @@ sunburst_data <- function(input, type = "auto", values = NULL,
   # --- Parse input into internal tree ---
   tree <- switch(type,
     newick = parse_newick(input),
+    phylo = phylo_to_tree(input),
     lineage = parse_lineage(input,
                             sep = if (is.null(sep)) "\t" else sep),
     node_parent = parse_node_parent(input,
@@ -68,7 +70,7 @@ sunburst_data <- function(input, type = "auto", values = NULL,
     dataframe = parse_dataframe(input),
     abort(
       "Unknown input type: {.val {type}}.",
-      i = "Use 'newick', 'lineage', 'node_parent', or 'dataframe'."
+      i = "Use 'newick', 'phylo', 'lineage', 'node_parent', or 'dataframe'."
     )
   )
 

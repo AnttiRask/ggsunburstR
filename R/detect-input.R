@@ -3,10 +3,14 @@
 # Not exported. See SPEC.md §2.2 for the detection cascade.
 
 # Detect the input type, returning one of:
-# "dataframe", "newick", "lineage", "node_parent".
+# "phylo", "dataframe", "newick", "lineage", "node_parent".
 detect_input_type <- function(input) {
-  # 1. Data.frame check
+  # 1. phylo object check (before data.frame, since phylo is a list)
+  if (inherits(input, "phylo")) {
+    return("phylo")
+  }
 
+  # 2. Data.frame check
   if (inherits(input, "data.frame")) {
     return("dataframe")
   }
@@ -27,7 +31,7 @@ detect_input_type <- function(input) {
   # 3. Unrecognisable
   abort(
     "Could not auto-detect input type.",
-    i = "Provide 'type' explicitly: 'newick', 'lineage', 'node_parent', or 'dataframe'."
+    i = "Provide 'type' explicitly: 'newick', 'phylo', 'lineage', 'node_parent', or 'dataframe'."
   )
 }
 

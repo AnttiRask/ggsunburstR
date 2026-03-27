@@ -21,10 +21,11 @@ sunburst_data(
 }
 \arguments{
 \item{input}{Hierarchical data. One of: Newick string, file path,
-data.frame with parent-child columns.}
+data.frame with parent-child columns, or an \code{ape::phylo} object.}
 
-\item{type}{Input type. One of \code{"auto"}, \code{"newick"}, \code{"lineage"},
-\code{"node_parent"}, \code{"dataframe"}. Auto-detection is recommended.}
+\item{type}{Input type. One of \code{"auto"}, \code{"newick"}, \code{"phylo"},
+\code{"lineage"}, \code{"node_parent"}, \code{"dataframe"}. Auto-detection is
+recommended.}
 
 \item{values}{Column name (character, for data.frame input) or named
 numeric vector mapping node names to values for sector sizing.
