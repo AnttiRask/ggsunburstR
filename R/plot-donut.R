@@ -1,6 +1,6 @@
 #' Create a donut (ring) chart
 #'
-#' Creates a donut chart — a sunburst restricted to the outermost 1–N
+#' Creates a donut chart -- a sunburst restricted to the outermost 1–N
 #' depth levels. The centre hole is created by shifting Y coordinates
 #' so the innermost displayed ring has `ymin > 0`.
 #'
@@ -17,6 +17,9 @@
 #'
 #' @return A `ggplot` object with `coord_polar()` and `theme_void()`.
 #'
+#' @seealso [sunburst()] for full sunburst plots, [icicle()] for
+#'   rectangular layouts.
+#'
 #' @examples
 #' sb <- sunburst_data("((a, b, c), (d, e));")
 #' donut(sb, fill = "name")
@@ -32,6 +35,12 @@ donut <- function(sb, levels = 1, fill = NULL, colour = "white",
 
   if (!is.null(fill) && !fill %in% names(sb$rects)) {
     abort("Column '{fill}' not found in sunburst data.")
+  }
+
+  # Single-node tree: no displayable nodes (root is excluded from rects)
+  if (nrow(sb$rects) == 0) {
+    warn("No displayable nodes -- tree has only a root.")
+    return(ggplot2::ggplot() + ggplot2::coord_polar() + ggplot2::theme_void())
   }
 
   # Filter to requested depth levels (outermost N levels)
@@ -66,7 +75,7 @@ donut <- function(sb, levels = 1, fill = NULL, colour = "white",
       )
   }
 
-  # Labels — filter to nodes in the donut, adjust y positions
+  # Labels -- filter to nodes in the donut, adjust y positions
   if (show_labels) {
     donut_labels <- sb$leaf_labels[
       sb$leaf_labels$node_id %in% donut_rects$node_id, , drop = FALSE

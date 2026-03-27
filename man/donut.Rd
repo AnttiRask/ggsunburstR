@@ -38,7 +38,7 @@ to ring thickness. Default \code{1}.}
 A \code{ggplot} object with \code{coord_polar()} and \code{theme_void()}.
 }
 \description{
-Creates a donut chart — a sunburst restricted to the outermost 1–N
+Creates a donut chart -- a sunburst restricted to the outermost 1–N
 depth levels. The centre hole is created by shifting Y coordinates
 so the innermost displayed ring has \code{ymin > 0}.
 }
@@ -47,4 +47,8 @@ sb <- sunburst_data("((a, b, c), (d, e));")
 donut(sb, fill = "name")
 donut(sb, levels = 2, fill = "depth")
 
+}
+\seealso{
+\code{\link[=sunburst]{sunburst()}} for full sunburst plots, \code{\link[=icicle]{icicle()}} for
+rectangular layouts.
 }
