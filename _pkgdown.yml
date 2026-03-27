@@ -14,6 +14,12 @@ reference:
     contents:
       - sunburst
       - icicle
+      - highlight_nodes
+
+  - title: "Utilities"
+    desc: "Tree inspection"
+    contents:
+      - nw_print
 
   - title: "S3 methods"
     desc: "Methods for sunburst_data objects"

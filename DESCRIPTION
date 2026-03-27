@@ -6,7 +6,7 @@ Description: Create sunburst and icicle adjacency diagrams using ggplot2.
     coordinates for each node, and produces standard ggplot2 objects that
     users can customise with familiar '+' syntax. A pure-R reimplementation
     of 'ggsunburst' that eliminates the Python/reticulate dependency.
-Version: 0.1.0
+Version: 0.2.0
 Authors@R: c(
     person("Antti", "Rask", role = c("aut", "cre"),
            email = "antti@rask.fi")
