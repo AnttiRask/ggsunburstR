@@ -108,3 +108,34 @@ test_that("donut() is composable with +", {
 test_that("donut() errors on non-sunburst_data input", {
   expect_error(donut(data.frame(x = 1)), class = "rlang_error")
 })
+
+# --- Single-node tree warns ---
+
+test_that("donut() warns on single-node tree with no displayable nodes", {
+  # A tree with just a root — root is excluded from rects
+  sb <- sunburst_data("(A);")
+  # This tree has 1 leaf + 1 root; the leaf is displayable.
+  # To test the empty case, we'd need a tree with only root.
+  # Since parse_newick always produces at least 1 tip, test with
+  # a manually constructed sb that has 0 rects rows.
+  empty_sb <- new_sunburst_data(
+    rects = data.frame(
+      node_id = integer(0), name = character(0), parent_name = character(0),
+      depth = integer(0), is_leaf = logical(0),
+      xmin = numeric(0), xmax = numeric(0),
+      ymin = numeric(0), ymax = numeric(0), x = numeric(0),
+      stringsAsFactors = FALSE
+    ),
+    leaf_labels = data.frame(
+      node_id = integer(0), label = character(0),
+      x = numeric(0), y = numeric(0),
+      angle = numeric(0), hjust = numeric(0),
+      stringsAsFactors = FALSE
+    ),
+    node_labels = data.frame(node_id = integer(0), stringsAsFactors = FALSE),
+    segments = data.frame(rx = numeric(0), stringsAsFactors = FALSE),
+    tree = new_tree(),
+    params = list(xlim = 360, rot = 0)
+  )
+  expect_warning(donut(empty_sb), "No displayable")
+})
