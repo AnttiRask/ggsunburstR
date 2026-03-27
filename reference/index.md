@@ -15,6 +15,15 @@ Create sunburst and icicle plots
   : Create a polar sunburst plot
 - [`icicle()`](https://anttirask.github.io/ggsunburstR/reference/icicle.md)
   : Create a rectangular icicle plot
+- [`highlight_nodes()`](https://anttirask.github.io/ggsunburstR/reference/highlight_nodes.md)
+  : Highlight specific nodes in a sunburst or icicle plot
+
+## Utilities
+
+Tree inspection
+
+- [`nw_print()`](https://anttirask.github.io/ggsunburstR/reference/nw_print.md)
+  : Print tree structure from Newick input
 
 ## S3 methods
 

@@ -32,12 +32,17 @@ sunburst_data(
 - input:
 
   Hierarchical data. One of: Newick string, file path, data.frame with
-  parent-child columns.
+  parent-child columns,
+  [`ape::phylo`](https://rdrr.io/pkg/ape/man/read.tree.html) object,
+  [`data.tree::Node`](https://rdrr.io/pkg/data.tree/man/Node.html)
+  object, character vector of delimited paths, or data.frame with a
+  `path` column.
 
 - type:
 
-  Input type. One of `"auto"`, `"newick"`, `"lineage"`, `"node_parent"`,
-  `"dataframe"`. Auto-detection is recommended.
+  Input type. One of `"auto"`, `"newick"`, `"phylo"`, `"datatree"`,
+  `"paths"`, `"lineage"`, `"node_parent"`, `"dataframe"`. Auto-detection
+  is recommended.
 
 - values:
 

@@ -13,7 +13,7 @@ suitable for rendering with sunburst() or icicle()."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">ggsunburstR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -70,12 +70,15 @@ suitable for rendering with <code><a href="sunburst.html">sunburst()</a></code> 
 
 <dl><dt id="arg-input">input<a class="anchor" aria-label="anchor" href="#arg-input"></a></dt>
 <dd><p>Hierarchical data. One of: Newick string, file path,
-data.frame with parent-child columns.</p></dd>
+data.frame with parent-child columns, <code><a href="https://rdrr.io/pkg/ape/man/read.tree.html" class="external-link">ape::phylo</a></code> object,
+<code><a href="https://rdrr.io/pkg/data.tree/man/Node.html" class="external-link">data.tree::Node</a></code> object, character vector of delimited paths,
+or data.frame with a <code>path</code> column.</p></dd>
 
 
 <dt id="arg-type">type<a class="anchor" aria-label="anchor" href="#arg-type"></a></dt>
-<dd><p>Input type. One of <code>"auto"</code>, <code>"newick"</code>, <code>"lineage"</code>,
-<code>"node_parent"</code>, <code>"dataframe"</code>. Auto-detection is recommended.</p></dd>
+<dd><p>Input type. One of <code>"auto"</code>, <code>"newick"</code>, <code>"phylo"</code>,
+<code>"datatree"</code>, <code>"paths"</code>, <code>"lineage"</code>, <code>"node_parent"</code>, <code>"dataframe"</code>.
+Auto-detection is recommended.</p></dd>
 
 
 <dt id="arg-values">values<a class="anchor" aria-label="anchor" href="#arg-values"></a></dt>
