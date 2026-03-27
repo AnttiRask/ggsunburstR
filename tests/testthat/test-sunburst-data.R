@@ -145,3 +145,20 @@ test_that("sunburst_data() $leaf_labels has label data", {
   expect_true("angle" %in% names(sb$leaf_labels))
   expect_true("hjust" %in% names(sb$leaf_labels))
 })
+
+# --- Ragged tree: values + extended combination ---
+
+test_that("sunburst_data() values + ragged + extended produces correct output", {
+  sb <- sunburst_data("((a, b), c);",
+                      values = c(a = 3, b = 1, c = 2),
+                      leaf_mode = "extended")
+  leaf_rects <- sb$rects[sb$rects$is_leaf, ]
+  # All leaves should have same ymax (extended)
+  expect_equal(length(unique(leaf_rects$ymax)), 1)
+  # Widths should be proportional to values
+  a_width <- leaf_rects[leaf_rects$name == "a", "xmax"] -
+             leaf_rects[leaf_rects$name == "a", "xmin"]
+  b_width <- leaf_rects[leaf_rects$name == "b", "xmax"] -
+             leaf_rects[leaf_rects$name == "b", "xmin"]
+  expect_equal(a_width / b_width, 3.0)
+})

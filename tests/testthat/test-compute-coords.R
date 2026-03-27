@@ -172,3 +172,52 @@ test_that("internal node X spans from min child xmin to max child xmax", {
   expect_equal(internal$xmin, result$rects[[a_id]]$xmin)
   expect_equal(internal$xmax, result$rects[[b_id]]$xmax)
 })
+
+# --- Ragged tree edge cases ---
+
+test_that("deeply ragged tree (5 levels) maintains xmin < xmax and ymin < ymax", {
+  result <- compute_test("((((a, b), c), d), e);")
+  non_null <- which(vapply(result$rects, function(r) !is.null(r), logical(1)))
+  for (i in non_null) {
+    r <- result$rects[[i]]
+    expect_true(r$xmin < r$xmax,
+                info = paste("node", i, "xmin >= xmax"))
+    expect_true(r$ymin < r$ymax,
+                info = paste("node", i, "ymin >= ymax"))
+  }
+})
+
+test_that("ragged tree with branch lengths + extended mode equalises ymax", {
+  result <- compute_test("((a:1, b:3):1, c:1);", leaf_mode = "extended")
+  leaf_ids <- which(vapply(result$rects, function(r) {
+    !is.null(r) && r$is_leaf
+  }, logical(1)))
+  ymaxs <- vapply(leaf_ids, function(i) result$rects[[i]]$ymax, numeric(1))
+  expect_equal(length(unique(ymaxs)), 1)
+  expect_equal(ymaxs[1], 0.0)
+})
+
+test_that("single-leaf tree extended mode is a no-op", {
+  result_actual <- compute_test("(a);", leaf_mode = "actual")
+  result_ext <- compute_test("(a);", leaf_mode = "extended")
+  leaf_actual <- which(vapply(result_actual$rects, function(r) {
+    !is.null(r) && r$is_leaf
+  }, logical(1)))
+  leaf_ext <- which(vapply(result_ext$rects, function(r) {
+    !is.null(r) && r$is_leaf
+  }, logical(1)))
+  expect_equal(result_actual$rects[[leaf_actual[1]]]$ymax,
+               result_ext$rects[[leaf_ext[1]]]$ymax)
+})
+
+test_that("all-same-depth tree extended mode is a no-op", {
+  result_actual <- compute_test("(a, b, c);", leaf_mode = "actual")
+  result_ext <- compute_test("(a, b, c);", leaf_mode = "extended")
+  leaf_ids <- which(vapply(result_actual$rects, function(r) {
+    !is.null(r) && r$is_leaf
+  }, logical(1)))
+  for (i in leaf_ids) {
+    expect_equal(result_actual$rects[[i]]$ymax,
+                 result_ext$rects[[i]]$ymax)
+  }
+})
