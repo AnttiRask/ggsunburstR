@@ -5,7 +5,12 @@
 # Detect the input type, returning one of:
 # "phylo", "dataframe", "paths", "newick", "lineage", "node_parent".
 detect_input_type <- function(input) {
-  # 1. phylo object check (before data.frame, since phylo is a list)
+  # 1a. data.tree::Node check (R6, before phylo and data.frame)
+  if (inherits(input, "Node") && inherits(input, "R6")) {
+    return("datatree")
+  }
+
+  # 1b. phylo object check (before data.frame, since phylo is a list)
   if (inherits(input, "phylo")) {
     return("phylo")
   }
@@ -47,7 +52,7 @@ detect_input_type <- function(input) {
   # 4. Unrecognisable
   abort(
     "Could not auto-detect input type.",
-    i = "Provide 'type' explicitly: 'newick', 'phylo', 'paths', 'lineage', 'node_parent', or 'dataframe'."
+    i = "Provide 'type' explicitly: 'newick', 'phylo', 'datatree', 'paths', 'lineage', 'node_parent', or 'dataframe'."
   )
 }
 

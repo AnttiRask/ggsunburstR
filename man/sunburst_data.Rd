@@ -22,11 +22,12 @@ sunburst_data(
 \arguments{
 \item{input}{Hierarchical data. One of: Newick string, file path,
 data.frame with parent-child columns, \code{ape::phylo} object,
-character vector of delimited paths, or data.frame with a \code{path} column.}
+\code{data.tree::Node} object, character vector of delimited paths,
+or data.frame with a \code{path} column.}
 
-\item{type}{Input type. One of \code{"auto"}, \code{"newick"}, \code{"phylo"}, \code{"paths"},
-\code{"lineage"}, \code{"node_parent"}, \code{"dataframe"}. Auto-detection is
-recommended.}
+\item{type}{Input type. One of \code{"auto"}, \code{"newick"}, \code{"phylo"},
+\code{"datatree"}, \code{"paths"}, \code{"lineage"}, \code{"node_parent"}, \code{"dataframe"}.
+Auto-detection is recommended.}
 
 \item{values}{Column name (character, for data.frame input) or named
 numeric vector mapping node names to values for sector sizing.
