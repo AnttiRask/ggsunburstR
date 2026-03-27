@@ -3,7 +3,7 @@ pkgdown: 2.2.0
 pkgdown_sha: ~
 articles:
   ggsunburstR: ggsunburstR.html
-last_built: 2026-03-27T00:13Z
+last_built: 2026-03-27T00:22Z
 urls:
   reference: https://anttirask.github.io/ggsunburstR/reference
   article: https://anttirask.github.io/ggsunburstR/articles

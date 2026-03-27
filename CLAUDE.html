@@ -36,35 +36,89 @@
 
 <div class="section level2">
 <h2 id="project-overview">Project Overview<a class="anchor" aria-label="anchor" href="#project-overview"></a></h2>
-<p><code>ggsunburstR</code> is an R package for creating sunburst charts using ggplot2.</p>
-<p>This project is in early development — the package structure has not yet been created.</p>
+<p><code>ggsunburstR</code> is an R package for creating sunburst and icicle adjacency diagrams using ggplot2. It accepts hierarchical data in multiple formats (Newick strings/files, data frames, lineage files, node-parent files), computes rectangle coordinates for each node, and produces standard ggplot2 objects.</p>
+<p>A pure-R reimplementation of <code>ggsunburst</code> that eliminates the Python/reticulate dependency.</p>
+<ul><li>
+<strong>Status</strong>: MVP complete (v0.1.0). Post-MVP roadmap in SPEC.md §9.</li>
+<li>
+<strong>License</strong>: MIT</li>
+<li>
+<strong>R version</strong>: &gt;= 4.1.0 (for base pipe <code>|&gt;</code>)</li>
+</ul></div>
+<div class="section level2">
+<h2 id="architecture">Architecture<a class="anchor" aria-label="anchor" href="#architecture"></a></h2>
+<pre><code>User API:     sunburst_data() → sunburst() / icicle()
+S3 class:     sunburst_data (print, plot, as.data.frame, $data alias)
+Computation:  assign_sizes → compute_coordinates → compute_label_positions
+Parsing:      detect_input_type → parse_newick / parse_dataframe / parse_lineage / parse_node_parent
+Tree:         new_tree, add_child, get_descendants, get_leaves, ladderize_tree, convert_to_ultrametric</code></pre>
+<p>All internal functions (not exported) live in <code>R/tree-*.R</code>, <code>R/compute-*.R</code>, <code>R/parse-*.R</code>, <code>R/detect-input.R</code>, <code>R/utils.R</code>. Exported functions: <code><a href="reference/sunburst_data.html">sunburst_data()</a></code>, <code><a href="reference/sunburst.html">sunburst()</a></code>, <code><a href="reference/icicle.html">icicle()</a></code>, plus S3 methods in <code>R/sunburst-class.R</code>.</p>
 </div>
 <div class="section level2">
 <h2 id="development-setup">Development Setup<a class="anchor" aria-label="anchor" href="#development-setup"></a></h2>
-<ul><li>This is an R package project. Use <code>devtools</code> for development workflows.</li>
-<li>Follow Tidyverse coding style and conventions.</li>
+<ul><li>Use <code>devtools</code> for all development workflows.</li>
+<li>Dependencies: <code>ape</code>, <code>cli</code>, <code>ggplot2</code>, <code>rlang</code> (Imports); <code>testthat</code>, <code>vdiffr</code>, <code>knitr</code>, <code>rmarkdown</code> (Suggests).</li>
 </ul></div>
 <div class="section level2">
 <h2 id="common-commands">Common Commands<a class="anchor" aria-label="anchor" href="#common-commands"></a></h2>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">load_all</span><span class="op">(</span><span class="op">)</span>      <span class="co"># Load package for interactive use</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">test</span><span class="op">(</span><span class="op">)</span>          <span class="co"># Run tests</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">check</span><span class="op">(</span><span class="op">)</span>         <span class="co"># R CMD check</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">document</span><span class="op">(</span><span class="op">)</span>      <span class="co"># Generate documentation from roxygen2</span></span>
-<span><span class="fu">pkgdown</span><span class="fu">::</span><span class="fu"><a href="https://pkgdown.r-lib.org/reference/build_site.html" class="external-link">build_site</a></span><span class="op">(</span><span class="op">)</span>     <span class="co"># Build documentation site</span></span></code></pre></div>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">test</span><span class="op">(</span><span class="op">)</span>          <span class="co"># Run all 342 tests</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">test</span><span class="op">(</span>filter <span class="op">=</span> <span class="st">"parse-newick"</span><span class="op">)</span>  <span class="co"># Run specific test file</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">check</span><span class="op">(</span><span class="op">)</span>         <span class="co"># R CMD check (target: 0/0/0)</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">document</span><span class="op">(</span><span class="op">)</span>      <span class="co"># Regenerate NAMESPACE and man/ from roxygen2</span></span>
+<span><span class="fu">pkgdown</span><span class="fu">::</span><span class="fu"><a href="https://pkgdown.r-lib.org/reference/build_site.html" class="external-link">build_site</a></span><span class="op">(</span><span class="op">)</span>     <span class="co"># Build documentation site locally</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="code-style">Code Style<a class="anchor" aria-label="anchor" href="#code-style"></a></h2>
 <ul><li>Follow the <a href="https://style.tidyverse.org/" class="external-link">Tidyverse style guide</a>.</li>
-<li>Use roxygen2 for documentation.</li>
-<li>Use testthat (edition 3) for tests.</li>
+<li>Use roxygen2 for exported function documentation. Internal functions get code comments (<code># ...</code>), not roxygen2.</li>
+<li>Use testthat edition 3. Test files mirror source: <code>R/parse-newick.R</code> → <code>tests/testthat/test-parse-newick.R</code>.</li>
 <li>Pipe operator: use <code>|&gt;</code> (base R pipe).</li>
+<li>Assignment: use <code>&lt;-</code>, never <code>=</code>.</li>
+<li>Use <code><a href="https://rlang.r-lib.org/reference/abort.html" class="external-link">rlang::abort()</a></code> / <code>warn()</code> / <code>inform()</code> for user-facing messages, never <code><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop()</a></code> / <code><a href="https://rdrr.io/r/base/warning.html" class="external-link">warning()</a></code> / <code><a href="https://rdrr.io/r/base/message.html" class="external-link">message()</a></code>.</li>
+<li>Use <code>::</code> for one-off calls to dependencies. <code>@importFrom</code> only in <code>ggsunburstR-package.R</code> for <code>rlang</code> and <code>stats</code>.</li>
+<li>Internal functions: prefixed with <code>.</code> for truly private helpers (e.g., <code>.resolve_values()</code>), unprefixed for internal-but-testable functions (e.g., <code>parse_newick()</code>).</li>
+</ul></div>
+<div class="section level2">
+<h2 id="key-design-decisions">Key Design Decisions<a class="anchor" aria-label="anchor" href="#key-design-decisions"></a></h2>
+<ul><li>
+<strong>Internal tree as list</strong> (<code>nodes</code>, <code>children</code>, <code>parent</code>, <code>root</code>, <code>n_tips</code>) — not exported, integer-indexed node IDs. See SPEC.md §2.1.</li>
+<li>
+<strong><code>add_child()</code> copy semantics</strong> — returns modified tree via <code>attr(, "tree")</code> workaround for R’s copy-on-modify.</li>
+<li>
+<strong>Pre-computed coordinates + <code>geom_rect()</code></strong> — no custom geom/stat ggproto (deferred to post-MVP).</li>
+<li>
+<strong><code>fill</code> as string column name</strong> — not tidy eval, for simplicity in MVP.</li>
 </ul></div>
 <div class="section level2">
 <h2 id="git-conventions">Git Conventions<a class="anchor" aria-label="anchor" href="#git-conventions"></a></h2>
-<ul><li>Branch: <code>main</code>
+<ul><li>Branch from <code>main</code> for each change: <code>change/&lt;slug&gt;</code>
 </li>
-<li>Commit messages: use conventional commits (e.g., <code>feat:</code>, <code>fix:</code>, <code>docs:</code>, <code>test:</code>).</li>
+<li>Commit messages: conventional commits (<code>feat:</code>, <code>fix:</code>, <code>test:</code>, <code>docs:</code>, <code>chore:</code>, <code>refactor:</code>)</li>
+<li>Never commit directly to <code>main</code> — merge from change branches after review.</li>
+<li>OpenSpec manages change lifecycle in <code>openspec/</code> directory.</li>
+</ul></div>
+<div class="section level2">
+<h2 id="cicd">CI/CD<a class="anchor" aria-label="anchor" href="#cicd"></a></h2>
+<ul><li>
+<strong>R CMD check</strong>: <code>.github/workflows/R-CMD-check.yaml</code> — runs on macOS, Windows, Ubuntu (R devel/release/oldrel)</li>
+<li>
+<strong>pkgdown</strong>: <code>.github/workflows/pkgdown.yaml</code> — builds and deploys to gh-pages on push to main</li>
+<li>
+<strong>Site</strong>: <a href="https://anttirask.github.io/ggsunburstR/" class="uri">https://anttirask.github.io/ggsunburstR/</a>
+</li>
+</ul></div>
+<div class="section level2">
+<h2 id="reference-documents">Reference Documents<a class="anchor" aria-label="anchor" href="#reference-documents"></a></h2>
+<ul><li>
+<code>SPEC.md</code> — Full architecture spec (source of truth for design decisions)</li>
+<li>
+<code>REQUIREMENTS.md</code> — Original requirements</li>
+<li>
+<code>openspec/</code> — Change management (archived changes in <code>openspec/changes/archive/</code>)</li>
+<li>
+<code>sunburst_data.R</code> — Legacy reference code (not part of the package, excluded via .Rbuildignore)</li>
 </ul></div>
 </div>
 
