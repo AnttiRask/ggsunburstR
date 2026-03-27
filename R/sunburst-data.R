@@ -6,8 +6,9 @@
 #' suitable for rendering with `sunburst()` or `icicle()`.
 #'
 #' @param input Hierarchical data. One of: Newick string, file path,
-#'   data.frame with parent-child columns, or an `ape::phylo` object.
-#' @param type Input type. One of `"auto"`, `"newick"`, `"phylo"`,
+#'   data.frame with parent-child columns, `ape::phylo` object,
+#'   character vector of delimited paths, or data.frame with a `path` column.
+#' @param type Input type. One of `"auto"`, `"newick"`, `"phylo"`, `"paths"`,
 #'   `"lineage"`, `"node_parent"`, `"dataframe"`. Auto-detection is
 #'   recommended.
 #' @param values Column name (character, for data.frame input) or named
@@ -63,6 +64,7 @@ sunburst_data <- function(input, type = "auto", values = NULL,
   tree <- switch(type,
     newick = parse_newick(input),
     phylo = phylo_to_tree(input),
+    paths = .parse_paths_input(input, sep = if (is.null(sep)) "/" else sep),
     lineage = parse_lineage(input,
                             sep = if (is.null(sep)) "\t" else sep),
     node_parent = parse_node_parent(input,
@@ -70,7 +72,7 @@ sunburst_data <- function(input, type = "auto", values = NULL,
     dataframe = parse_dataframe(input),
     abort(
       "Unknown input type: {.val {type}}.",
-      i = "Use 'newick', 'phylo', 'lineage', 'node_parent', or 'dataframe'."
+      i = "Use 'newick', 'phylo', 'paths', 'lineage', 'node_parent', or 'dataframe'."
     )
   )
 
@@ -122,6 +124,27 @@ sunburst_data <- function(input, type = "auto", values = NULL,
     tree        = tree,
     params      = params
   )
+}
+
+# Handle paths input: character vector or data.frame with path column.
+# For data.frames, extracts the path column and builds extras_list from
+# remaining columns (attached to leaf nodes).
+.parse_paths_input <- function(input, sep = "/") {
+  if (inherits(input, "data.frame")) {
+    path_col <- which(tolower(names(input)) == "path")
+    paths <- as.character(input[[path_col[1]]])
+    extra_cols <- setdiff(seq_along(names(input)), path_col)
+    if (length(extra_cols) > 0) {
+      extras_list <- lapply(seq_len(nrow(input)), function(i) {
+        as.list(input[i, extra_cols, drop = FALSE])
+      })
+    } else {
+      extras_list <- NULL
+    }
+    parse_paths(paths, sep = sep, extras_list = extras_list)
+  } else {
+    parse_paths(input, sep = sep)
+  }
 }
 
 # Resolve the values parameter into a named numeric vector or NULL.
@@ -228,6 +251,15 @@ sunburst_data <- function(input, type = "auto", values = NULL,
     base
   })
   rects_list <- rects_list[!vapply(rects_list, is.null, logical(1))]
+  # Ensure all data.frames have the same columns before rbinding
+  # (some nodes may have extra columns that others lack)
+  all_cols <- unique(unlist(lapply(rects_list, names)))
+  rects_list <- lapply(rects_list, function(df) {
+    for (col in setdiff(all_cols, names(df))) {
+      df[[col]] <- NA
+    }
+    df[, all_cols, drop = FALSE]
+  })
   rects_df <- do.call(rbind, rects_list)
 
   # --- Leaf labels ---

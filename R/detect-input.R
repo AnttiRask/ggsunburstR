@@ -3,35 +3,51 @@
 # Not exported. See SPEC.md §2.2 for the detection cascade.
 
 # Detect the input type, returning one of:
-# "phylo", "dataframe", "newick", "lineage", "node_parent".
+# "phylo", "dataframe", "paths", "newick", "lineage", "node_parent".
 detect_input_type <- function(input) {
   # 1. phylo object check (before data.frame, since phylo is a list)
   if (inherits(input, "phylo")) {
     return("phylo")
   }
 
-  # 2. Data.frame check
+  # 2. Data.frame check — distinguish paths vs parent-child
   if (inherits(input, "data.frame")) {
+    df_names <- tolower(names(input))
+    has_parent <- "parent" %in% df_names
+    has_child <- "child" %in% df_names || "node" %in% df_names
+    has_path <- "path" %in% df_names
+    # If it has a path column but no parent-child columns, treat as paths
+    if (has_path && !has_parent) {
+      return("paths")
+    }
     return("dataframe")
   }
 
-  # 2. Character string checks
-  if (is.character(input) && length(input) == 1) {
-    # 2a. File path — sniff the content
-    if (file.exists(input)) {
-      return(.sniff_file_type(input))
+  # 3. Character checks
+  if (is.character(input)) {
+    # 3a. Multi-element vector → paths
+    if (length(input) > 1) {
+      return("paths")
     }
 
-    # 2b. Newick string — contains parentheses and semicolon
-    if (grepl("\\(", input) && grepl(";", input)) {
-      return("newick")
+    # 3b. Single string
+    if (length(input) == 1) {
+      # File path — sniff the content
+      if (file.exists(input)) {
+        return(.sniff_file_type(input))
+      }
+
+      # Newick string — contains parentheses and semicolon
+      if (grepl("\\(", input) && grepl(";", input)) {
+        return("newick")
+      }
     }
   }
 
-  # 3. Unrecognisable
+  # 4. Unrecognisable
   abort(
     "Could not auto-detect input type.",
-    i = "Provide 'type' explicitly: 'newick', 'phylo', 'lineage', 'node_parent', or 'dataframe'."
+    i = "Provide 'type' explicitly: 'newick', 'phylo', 'paths', 'lineage', 'node_parent', or 'dataframe'."
   )
 }
 
