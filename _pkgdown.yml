@@ -18,6 +18,11 @@ reference:
       - donut
       - ggtree
 
+  - title: "Themes"
+    desc: "Custom themes for sunburst plots"
+    contents:
+      - theme_sunburst
+
   - title: "Multi-scale fill"
     desc: "Per-depth fill colour scales"
     contents:
