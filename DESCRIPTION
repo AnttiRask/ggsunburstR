@@ -24,6 +24,7 @@ Imports:
 Suggests:
     data.tree,
     dplyr,
+    ggnewscale,
     ggrepel,
     knitr,
     rmarkdown,
