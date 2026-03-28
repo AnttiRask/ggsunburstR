@@ -271,14 +271,17 @@ sunburst_data <- function(input, type = "auto", values = NULL,
   leaf_list <- lapply(leaf_ids, function(nid) {
     l <- labels$leaf_labels[[nid]]
     data.frame(
-      node_id = nid,
-      label   = l$label,
-      x       = l$x,
-      y       = l$y,
-      angle   = l$rangle,
-      hjust   = l$rhjust,
-      pangle  = l$pangle,
-      pvjust  = l$pvjust,
+      node_id     = nid,
+      label       = l$label,
+      x           = l$x,
+      y           = l$y,
+      angle       = l$rangle,
+      hjust       = l$rhjust,
+      pangle      = l$pangle,
+      pvjust      = l$pvjust,
+      ymin        = l$ymin,
+      ymax        = l$ymax,
+      delta_angle = l$delta_angle,
       stringsAsFactors = FALSE
     )
   })
@@ -289,6 +292,8 @@ sunburst_data <- function(input, type = "auto", values = NULL,
                x = numeric(0), y = numeric(0),
                angle = numeric(0), hjust = numeric(0),
                pangle = numeric(0), pvjust = numeric(0),
+               ymin = numeric(0), ymax = numeric(0),
+               delta_angle = numeric(0),
                stringsAsFactors = FALSE)
   }
 

@@ -127,6 +127,45 @@ test_that("labels on left side (cos < 0) have rhjust = 1 and flipped rangle", {
   expect_true(found_right, info = "No labels on right side — test is incomplete")
 })
 
+# --- Leaf labels include ymin, ymax, delta_angle ---
+
+test_that("leaf labels include y_mid, ymin, ymax fields", {
+  labels <- compute_labels_test("(a, b, c);")
+  leaf_ids <- which(vapply(labels$leaf_labels, function(l) !is.null(l),
+                           logical(1)))
+  for (lid in leaf_ids) {
+    l <- labels$leaf_labels[[lid]]
+    expect_true(!is.null(l$ymin), info = "missing ymin")
+    expect_true(!is.null(l$ymax), info = "missing ymax")
+    expect_true(l$ymin < l$ymax, info = "ymin must be < ymax")
+  }
+})
+
+test_that("leaf labels include delta_angle", {
+  labels <- compute_labels_test("(a, b, c);")
+  leaf_ids <- which(vapply(labels$leaf_labels, function(l) !is.null(l),
+                           logical(1)))
+  for (lid in leaf_ids) {
+    l <- labels$leaf_labels[[lid]]
+    expect_true(!is.null(l$delta_angle), info = "missing delta_angle")
+    expect_true(l$delta_angle > 0, info = "delta_angle must be positive")
+  }
+})
+
+test_that("leaf delta_angle equals size * (xlim / total_size)", {
+  labels <- compute_labels_test("(a, b, c);", values = c(a = 2, b = 1, c = 3))
+  leaf_ids <- which(vapply(labels$leaf_labels, function(l) !is.null(l),
+                           logical(1)))
+  # total_size = 6, xlim = 360
+  for (lid in leaf_ids) {
+    l <- labels$leaf_labels[[lid]]
+    # Look up the leaf name to find its expected value
+    if (l$label == "a") expect_equal(l$delta_angle, 2 / 6 * 360)
+    if (l$label == "b") expect_equal(l$delta_angle, 1 / 6 * 360)
+    if (l$label == "c") expect_equal(l$delta_angle, 3 / 6 * 360)
+  }
+})
+
 # --- Rotation offset ---
 
 test_that("rot parameter shifts base angles", {

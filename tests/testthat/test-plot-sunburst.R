@@ -81,6 +81,16 @@ test_that("sunburst() applies theme_void", {
               length(p$theme) > 0)
 })
 
+# --- leaf_labels output includes geometry columns ---
+
+test_that("sunburst_data leaf_labels includes ymin, ymax, delta_angle", {
+  sb <- make_sb()
+  expect_true("ymin" %in% names(sb$leaf_labels))
+  expect_true("ymax" %in% names(sb$leaf_labels))
+  expect_true("delta_angle" %in% names(sb$leaf_labels))
+  expect_true(all(sb$leaf_labels$delta_angle > 0))
+})
+
 # --- plot.sunburst_data dispatches ---
 
 test_that("plot.sunburst_data() dispatches to sunburst()", {

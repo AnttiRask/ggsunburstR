@@ -29,15 +29,18 @@ compute_label_positions <- function(rects, tree, xlim = 360,
 
     if (r$is_leaf) {
       leaf_labels[[nid]] <- list(
-        label   = node$name,
-        angle   = base_angle,
-        rangle  = rangle(base_angle),
-        pangle  = pangle(base_angle),
-        rhjust  = hjust_rtext(base_angle),
-        pvjust  = vjust_ptext(base_angle),
-        x       = r$x,
-        y       = r$ymax,  # outer edge per SPEC.md §2.4.1
-        y_mid   = r$ymin + (r$ymax - r$ymin) / 2
+        label       = node$name,
+        angle       = base_angle,
+        rangle      = rangle(base_angle),
+        pangle      = pangle(base_angle),
+        rhjust      = hjust_rtext(base_angle),
+        pvjust      = vjust_ptext(base_angle),
+        x           = r$x,
+        y           = r$ymax,  # outer edge per SPEC.md §2.4.1
+        y_mid       = r$ymin + (r$ymax - r$ymin) / 2,
+        ymin        = r$ymin,
+        ymax        = r$ymax,
+        delta_angle = node$size * (xlim / total_size)
       )
     } else {
       node_labels[[nid]] <- list(
