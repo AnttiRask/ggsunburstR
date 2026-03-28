@@ -56,7 +56,7 @@
 </div>
 <!-- badges: start -->
 
-<p>Create sunburst and icicle adjacency diagrams using ggplot2. Accepts hierarchical data in multiple formats (Newick strings/files, data frames, lineage files, node-parent files), computes rectangle coordinates for each node, and produces standard ggplot2 objects that you can customise with the familiar <code>+</code> syntax.</p>
+<p>Create sunburst, icicle, donut, and tree adjacency diagrams using ggplot2. Accepts hierarchical data in multiple formats, computes rectangle coordinates for each node, and produces standard ggplot2 objects that you can customise with the familiar <code>+</code> syntax.</p>
 <p>A pure-R reimplementation of <a href="https://github.com/didacs/ggsunburst" class="external-link">ggsunburst</a> that eliminates the Python/reticulate dependency.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -79,12 +79,18 @@
 <span><span class="fu"><a href="reference/sunburst.html">sunburst</a></span><span class="op">(</span><span class="va">sb</span>, fill <span class="op">=</span> <span class="st">"depth"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Icicle (rectangular) plot</span></span>
-<span><span class="fu"><a href="reference/icicle.html">icicle</a></span><span class="op">(</span><span class="va">sb</span>, fill <span class="op">=</span> <span class="st">"depth"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="reference/icicle.html">icicle</a></span><span class="op">(</span><span class="va">sb</span>, fill <span class="op">=</span> <span class="st">"depth"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Donut (ring) chart</span></span>
+<span><span class="fu"><a href="reference/donut.html">donut</a></span><span class="op">(</span><span class="va">sb</span>, fill <span class="op">=</span> <span class="st">"name"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Tree (dendrogram)</span></span>
+<span><span class="fu"><a href="reference/ggtree.html">ggtree</a></span><span class="op">(</span><span class="va">sb</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="input-formats">Input formats<a class="anchor" aria-label="anchor" href="#input-formats"></a>
 </h2>
-<p>ggsunburstR accepts four input formats:</p>
+<p>ggsunburstR accepts seven input formats:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># 1. Newick string</span></span>
 <span><span class="va">sb</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/sunburst_data.html">sunburst_data</a></span><span class="op">(</span><span class="st">"((a, b, c), (d, e, f));"</span><span class="op">)</span></span>
@@ -99,30 +105,80 @@
 <span><span class="op">)</span></span>
 <span><span class="va">sb</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/sunburst_data.html">sunburst_data</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># 4. Node-parent CSV file</span></span>
-<span><span class="va">sb</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/sunburst_data.html">sunburst_data</a></span><span class="op">(</span><span class="st">"path/to/data.csv"</span>, type <span class="op">=</span> <span class="st">"node_parent"</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="customisation">Customisation<a class="anchor" aria-label="anchor" href="#customisation"></a>
-</h2>
-<p>The output is a standard ggplot2 object, so you can add layers, scales, themes, and labels:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">sb</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/sunburst_data.html">sunburst_data</a></span><span class="op">(</span><span class="st">"((a, b, c), (d, e, f));"</span><span class="op">)</span></span>
+<span><span class="co"># 4. Path-delimited strings</span></span>
+<span><span class="va">sb</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/sunburst_data.html">sunburst_data</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A/B/C"</span>, <span class="st">"A/B/D"</span>, <span class="st">"A/E"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="reference/sunburst.html">sunburst</a></span><span class="op">(</span><span class="va">sb</span>, fill <span class="op">=</span> <span class="st">"name"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_fill_brewer</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"Set3"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"My Sunburst"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="co"># 5. Data frame with path column</span></span>
+<span><span class="va">sb</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/sunburst_data.html">sunburst_data</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A/B/C"</span>, <span class="st">"A/B/D"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># 6. ape::phylo object</span></span>
+<span><span class="va">phylo</span> <span class="op">&lt;-</span> <span class="fu">ape</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ape/man/read.tree.html" class="external-link">read.tree</a></span><span class="op">(</span>text <span class="op">=</span> <span class="st">"(A, B, C);"</span><span class="op">)</span></span>
+<span><span class="va">sb</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/sunburst_data.html">sunburst_data</a></span><span class="op">(</span><span class="va">phylo</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># 7. data.tree::Node object</span></span>
+<span><span class="va">root</span> <span class="op">&lt;-</span> <span class="fu">data.tree</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/data.tree/man/Node.html" class="external-link">Node</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="st">"root"</span><span class="op">)</span></span>
+<span><span class="va">root</span><span class="op">$</span><span class="fu">AddChild</span><span class="op">(</span><span class="st">"A"</span><span class="op">)</span></span>
+<span><span class="va">root</span><span class="op">$</span><span class="fu">AddChild</span><span class="op">(</span><span class="st">"B"</span><span class="op">)</span></span>
+<span><span class="va">sb</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/sunburst_data.html">sunburst_data</a></span><span class="op">(</span><span class="va">root</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="value-weighted-sectors">Value-weighted sectors<a class="anchor" aria-label="anchor" href="#value-weighted-sectors"></a>
 </h2>
 <p>Use the <code>values</code> parameter to size sectors by data:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sb</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/sunburst_data.html">sunburst_data</a></span><span class="op">(</span></span>
 <span>  <span class="st">"((a, b, c), (d, e, f));"</span>,</span>
 <span>  values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>a <span class="op">=</span> <span class="fl">10</span>, b <span class="op">=</span> <span class="fl">5</span>, c <span class="op">=</span> <span class="fl">3</span>, d <span class="op">=</span> <span class="fl">8</span>, e <span class="op">=</span> <span class="fl">2</span>, f <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/sunburst.html">sunburst</a></span><span class="op">(</span><span class="va">sb</span>, fill <span class="op">=</span> <span class="st">"name"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="drilldown-into-subtrees">Drilldown into subtrees<a class="anchor" aria-label="anchor" href="#drilldown-into-subtrees"></a>
+</h2>
+<p>Zoom into a specific branch:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sb</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/sunburst_data.html">sunburst_data</a></span><span class="op">(</span><span class="st">"((a, b)X, (c, d)Y)root;"</span><span class="op">)</span></span>
+<span><span class="va">sub</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/drilldown.html">drilldown</a></span><span class="op">(</span><span class="va">sb</span>, node <span class="op">=</span> <span class="st">"X"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/sunburst.html">sunburst</a></span><span class="op">(</span><span class="va">sub</span>, fill <span class="op">=</span> <span class="st">"name"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="annotations">Annotations<a class="anchor" aria-label="anchor" href="#annotations"></a>
+</h2>
+<p>Add bar charts or heatmap tiles adjacent to leaf nodes:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  parent <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="st">"root"</span>, <span class="st">"root"</span><span class="op">)</span>,</span>
+<span>  child  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"root"</span>, <span class="st">"A"</span>, <span class="st">"B"</span><span class="op">)</span>,</span>
+<span>  score  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="fl">0.5</span>, <span class="fl">0.9</span><span class="op">)</span>,</span>
+<span>  group  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="st">"x"</span>, <span class="st">"y"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">sb</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/sunburst_data.html">sunburst_data</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span></span>
+<span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/icicle.html">icicle</a></span><span class="op">(</span><span class="va">sb</span>, fill <span class="op">=</span> <span class="st">"depth"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Bar annotations</span></span>
+<span><span class="fu"><a href="reference/bars.html">bars</a></span><span class="op">(</span><span class="va">p</span>, <span class="va">sb</span>, variables <span class="op">=</span> <span class="st">"score"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Tile (heatmap) annotations</span></span>
+<span><span class="fu"><a href="reference/tile.html">tile</a></span><span class="op">(</span><span class="va">p</span>, <span class="va">sb</span>, variables <span class="op">=</span> <span class="st">"group"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="highlight-specific-nodes">Highlight specific nodes<a class="anchor" aria-label="anchor" href="#highlight-specific-nodes"></a>
+</h2>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sb</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/sunburst_data.html">sunburst_data</a></span><span class="op">(</span><span class="st">"((a, b, c), (d, e));"</span><span class="op">)</span></span>
+<span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/sunburst.html">sunburst</a></span><span class="op">(</span><span class="va">sb</span>, fill <span class="op">=</span> <span class="st">"depth"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/highlight_nodes.html">highlight_nodes</a></span><span class="op">(</span><span class="va">p</span>, nodes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="st">"c"</span><span class="op">)</span>, fill <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="customisation">Customisation<a class="anchor" aria-label="anchor" href="#customisation"></a>
+</h2>
+<p>The output is a standard ggplot2 object:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sb</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/sunburst_data.html">sunburst_data</a></span><span class="op">(</span><span class="st">"((a, b, c), (d, e, f));"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="reference/sunburst.html">sunburst</a></span><span class="op">(</span><span class="va">sb</span>, fill <span class="op">=</span> <span class="st">"name"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_fill_brewer</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"Set3"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"My Sunburst"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="license">License<a class="anchor" aria-label="anchor" href="#license"></a>
