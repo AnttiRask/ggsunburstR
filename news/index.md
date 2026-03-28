@@ -1,5 +1,49 @@
 # Changelog
 
+## ggsunburstR 0.4.0
+
+### Label enhancements
+
+- [`sunburst()`](https://anttirask.github.io/ggsunburstR/reference/sunburst.md)
+  gains `label_type = "perpendicular"` for arc-following labels that use
+  pre-computed `pangle`/`pvjust` values and position text at the radial
+  midpoint.
+- [`sunburst()`](https://anttirask.github.io/ggsunburstR/reference/sunburst.md)
+  and
+  [`icicle()`](https://anttirask.github.io/ggsunburstR/reference/icicle.md)
+  gain `show_node_labels` for internal node labels, `label_size` for
+  controlling text size, and `min_label_angle` for filtering labels on
+  narrow sectors.
+- [`icicle()`](https://anttirask.github.io/ggsunburstR/reference/icicle.md)
+  gains `label_repel = TRUE` for `ggrepel`-based collision avoidance.
+  Requires the `ggrepel` package (Suggests). Polar repulsion for
+  sunbursts is deferred – use `min_label_angle` instead.
+
+### New functions
+
+- [`sunburst_multifill()`](https://anttirask.github.io/ggsunburstR/reference/sunburst_multifill.md)
+  and
+  [`icicle_multifill()`](https://anttirask.github.io/ggsunburstR/reference/icicle_multifill.md)
+  create plots with per-depth fill colour scales using
+  [`ggnewscale::new_scale_fill()`](https://eliocamp.github.io/ggnewscale/reference/new_scale.html).
+  Depths not listed in `fills` are rendered with static grey.
+
+### Data improvements
+
+- [`sunburst_data()`](https://anttirask.github.io/ggsunburstR/reference/sunburst_data.md)
+  now includes `ymin`, `ymax`, and `delta_angle` columns in the
+  `$leaf_labels` data.frame, enabling perpendicular label positioning
+  and angular filtering.
+
+### Dependencies
+
+- Added `ggrepel` and `ggnewscale` to Suggests.
+
+### Testing
+
+- Added 69 new tests (569 total).
+- R CMD check: 0 errors, 0 warnings, 0 notes.
+
 ## ggsunburstR 0.3.0
 
 ### New plot types

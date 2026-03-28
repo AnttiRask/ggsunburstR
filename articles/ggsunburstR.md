@@ -110,6 +110,56 @@ sunburst(sb, fill = "depth", show_labels = TRUE)
 
 ![](ggsunburstR_files/figure-html/labels-1.png)
 
+### Perpendicular labels
+
+Use `label_type = "perpendicular"` for arc-following labels:
+
+``` r
+sunburst(sb, fill = "depth", show_labels = TRUE,
+         label_type = "perpendicular")
+```
+
+![](ggsunburstR_files/figure-html/perp-labels-1.png)
+
+### Internal node labels and filtering
+
+Show labels for internal nodes and filter out labels on narrow sectors:
+
+``` r
+sb <- sunburst_data("((mammals, birds, reptiles)vertebrates, (beetles, flies)insects)animals;")
+sunburst(sb, fill = "name", show_labels = TRUE,
+         show_node_labels = TRUE, min_label_angle = 30,
+         label_size = 3.5)
+```
+
+![](ggsunburstR_files/figure-html/node-labels-1.png)
+
+### Label repulsion (icicle)
+
+Use `ggrepel` for collision avoidance in icicle plots:
+
+``` r
+sb <- sunburst_data("((a, b, c, d, e), (f, g, h));")
+icicle(sb, fill = "depth", show_labels = TRUE, label_repel = TRUE)
+```
+
+![](ggsunburstR_files/figure-html/repel-labels-1.png)
+
+## Per-depth fill scales
+
+Use
+[`sunburst_multifill()`](https://anttirask.github.io/ggsunburstR/reference/sunburst_multifill.md)
+or
+[`icicle_multifill()`](https://anttirask.github.io/ggsunburstR/reference/icicle_multifill.md)
+to map different colour scales to different hierarchy levels:
+
+``` r
+sb <- sunburst_data("((a, b)X, (c, d)Y)root;")
+sunburst_multifill(sb, fills = list("1" = "name", "2" = "name"))
+```
+
+![](ggsunburstR_files/figure-html/multifill-1.png)
+
 ## Options
 
 Key parameters for

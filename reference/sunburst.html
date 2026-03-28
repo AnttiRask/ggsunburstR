@@ -9,7 +9,7 @@ ggplot2::geom_rect() with coord_polar() and theme_void()."><meta property="og:im
 
     <a class="navbar-brand me-2" href="../index.html">ggsunburstR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,7 +48,11 @@ ggplot2::geom_rect() with coord_polar() and theme_void()."><meta property="og:im
 <span>  colour <span class="op">=</span> <span class="st">"white"</span>,</span>
 <span>  linewidth <span class="op">=</span> <span class="fl">0.2</span>,</span>
 <span>  show_labels <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  show_node_labels <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  label_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"radial"</span>, <span class="st">"perpendicular"</span><span class="op">)</span>,</span>
+<span>  label_size <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>  min_label_angle <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  label_repel <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -79,9 +83,30 @@ ggplot2::geom_rect() with coord_polar() and theme_void()."><meta property="og:im
 Default <code>FALSE</code>.</p></dd>
 
 
+<dt id="arg-show-node-labels">show_node_labels<a class="anchor" aria-label="anchor" href="#arg-show-node-labels"></a></dt>
+<dd><p>Whether to add text labels for internal nodes.
+Only takes effect when <code>show_labels = TRUE</code>. Default <code>FALSE</code>.</p></dd>
+
+
 <dt id="arg-label-type">label_type<a class="anchor" aria-label="anchor" href="#arg-label-type"></a></dt>
 <dd><p>Label orientation. <code>"radial"</code>: text reads outward.
-<code>"perpendicular"</code>: text follows arc (post-MVP quality).</p></dd>
+<code>"perpendicular"</code>: text follows the arc.</p></dd>
+
+
+<dt id="arg-label-size">label_size<a class="anchor" aria-label="anchor" href="#arg-label-size"></a></dt>
+<dd><p>Text size for labels. Default <code>3</code>.</p></dd>
+
+
+<dt id="arg-min-label-angle">min_label_angle<a class="anchor" aria-label="anchor" href="#arg-min-label-angle"></a></dt>
+<dd><p>Minimum angular extent (degrees) for a node to
+receive a label. Nodes with <code>delta_angle &lt; min_label_angle</code> are not
+labelled. Default <code>0</code> (no filtering).</p></dd>
+
+
+<dt id="arg-label-repel">label_repel<a class="anchor" aria-label="anchor" href="#arg-label-repel"></a></dt>
+<dd><p>Not supported for sunburst plots. Use
+<code><a href="icicle.html">icicle()</a></code> for label repulsion, or <code>min_label_angle</code> to reduce
+label clutter on sunbursts. Default <code>FALSE</code>.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
@@ -100,6 +125,8 @@ Default <code>FALSE</code>.</p></dd>
 <span class="r-plt img"><img src="sunburst-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="fu">sunburst</span><span class="op">(</span><span class="va">sb</span>, fill <span class="op">=</span> <span class="st">"depth"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="sunburst-2.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span><span class="fu">sunburst</span><span class="op">(</span><span class="va">sb</span>, show_labels <span class="op">=</span> <span class="cn">TRUE</span>, label_type <span class="op">=</span> <span class="st">"perpendicular"</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="sunburst-3.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

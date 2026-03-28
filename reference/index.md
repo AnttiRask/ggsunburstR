@@ -22,6 +22,15 @@ Create sunburst, icicle, donut, and tree plots
 - [`ggtree()`](https://anttirask.github.io/ggsunburstR/reference/ggtree.md)
   : Create a tree-style dendrogram plot
 
+## Multi-scale fill
+
+Per-depth fill colour scales
+
+- [`sunburst_multifill()`](https://anttirask.github.io/ggsunburstR/reference/sunburst_multifill.md)
+  : Create a sunburst plot with per-depth fill scales
+- [`icicle_multifill()`](https://anttirask.github.io/ggsunburstR/reference/icicle_multifill.md)
+  : Create an icicle plot with per-depth fill scales
+
 ## Annotation layers
 
 Add annotations to existing plots

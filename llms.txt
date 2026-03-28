@@ -117,6 +117,37 @@ bars(p, sb, variables = "score")
 tile(p, sb, variables = "group")
 ```
 
+## Label options
+
+Control label appearance in sunburst and icicle plots:
+
+``` r
+sb <- sunburst_data("((a, b, c), (d, e));")
+
+# Arc-following (perpendicular) labels
+sunburst(sb, fill = "depth", show_labels = TRUE,
+         label_type = "perpendicular")
+
+# Internal node labels + minimum angle filter
+sunburst(sb, fill = "depth", show_labels = TRUE,
+         show_node_labels = TRUE, min_label_angle = 30)
+
+# ggrepel collision avoidance (icicle only)
+icicle(sb, fill = "depth", show_labels = TRUE, label_repel = TRUE)
+```
+
+## Per-depth fill scales
+
+Use different colour scales for different hierarchy levels:
+
+``` r
+sb <- sunburst_data("((a, b)X, (c, d)Y)root;")
+
+# Different fill column per depth (requires ggnewscale)
+sunburst_multifill(sb, fills = list("1" = "name", "2" = "name"))
+icicle_multifill(sb, fills = list("1" = "name", "2" = "name"))
+```
+
 ## Highlight specific nodes
 
 ``` r
@@ -164,6 +195,15 @@ Create sunburst, icicle, donut, and tree plots
   : Create a donut (ring) chart
 - [`ggtree()`](https://anttirask.github.io/ggsunburstR/reference/ggtree.md)
   : Create a tree-style dendrogram plot
+
+## Multi-scale fill
+
+Per-depth fill colour scales
+
+- [`sunburst_multifill()`](https://anttirask.github.io/ggsunburstR/reference/sunburst_multifill.md)
+  : Create a sunburst plot with per-depth fill scales
+- [`icicle_multifill()`](https://anttirask.github.io/ggsunburstR/reference/icicle_multifill.md)
+  : Create an icicle plot with per-depth fill scales
 
 ## Annotation layers
 

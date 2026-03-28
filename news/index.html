@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ggsunburstR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -32,6 +32,37 @@
       <small>Source: <a href="https://github.com/AnttiRask/ggsunburstR/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.4.0" id="ggsunburstr-040">ggsunburstR 0.4.0<a class="anchor" aria-label="anchor" href="#ggsunburstr-040"></a></h2>
+<div class="section level3">
+<h3 id="label-enhancements-0-4-0">Label enhancements<a class="anchor" aria-label="anchor" href="#label-enhancements-0-4-0"></a></h3>
+<ul><li>
+<code><a href="../reference/sunburst.html">sunburst()</a></code> gains <code>label_type = "perpendicular"</code> for arc-following labels that use pre-computed <code>pangle</code>/<code>pvjust</code> values and position text at the radial midpoint.</li>
+<li>
+<code><a href="../reference/sunburst.html">sunburst()</a></code> and <code><a href="../reference/icicle.html">icicle()</a></code> gain <code>show_node_labels</code> for internal node labels, <code>label_size</code> for controlling text size, and <code>min_label_angle</code> for filtering labels on narrow sectors.</li>
+<li>
+<code><a href="../reference/icicle.html">icicle()</a></code> gains <code>label_repel = TRUE</code> for <code>ggrepel</code>-based collision avoidance. Requires the <code>ggrepel</code> package (Suggests). Polar repulsion for sunbursts is deferred – use <code>min_label_angle</code> instead.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="new-functions-0-4-0">New functions<a class="anchor" aria-label="anchor" href="#new-functions-0-4-0"></a></h3>
+<ul><li>
+<code><a href="../reference/sunburst_multifill.html">sunburst_multifill()</a></code> and <code><a href="../reference/icicle_multifill.html">icicle_multifill()</a></code> create plots with per-depth fill colour scales using <code><a href="https://eliocamp.github.io/ggnewscale/reference/new_scale.html" class="external-link">ggnewscale::new_scale_fill()</a></code>. Depths not listed in <code>fills</code> are rendered with static grey.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="data-improvements-0-4-0">Data improvements<a class="anchor" aria-label="anchor" href="#data-improvements-0-4-0"></a></h3>
+<ul><li>
+<code><a href="../reference/sunburst_data.html">sunburst_data()</a></code> now includes <code>ymin</code>, <code>ymax</code>, and <code>delta_angle</code> columns in the <code>$leaf_labels</code> data.frame, enabling perpendicular label positioning and angular filtering.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="dependencies-0-4-0">Dependencies<a class="anchor" aria-label="anchor" href="#dependencies-0-4-0"></a></h3>
+<ul><li>Added <code>ggrepel</code> and <code>ggnewscale</code> to Suggests.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="testing-0-4-0">Testing<a class="anchor" aria-label="anchor" href="#testing-0-4-0"></a></h3>
+<ul><li>Added 69 new tests (569 total).</li>
+<li>R CMD check: 0 errors, 0 warnings, 0 notes.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.0" id="ggsunburstr-030">ggsunburstR 0.3.0<a class="anchor" aria-label="anchor" href="#ggsunburstr-030"></a></h2>
 <div class="section level3">

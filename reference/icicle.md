@@ -14,6 +14,10 @@ icicle(
   colour = "white",
   linewidth = 0.2,
   show_labels = FALSE,
+  show_node_labels = FALSE,
+  label_size = 3,
+  min_label_angle = 0,
+  label_repel = FALSE,
   ...
 )
 ```
@@ -41,6 +45,28 @@ icicle(
 - show_labels:
 
   Whether to add text labels. Default `FALSE`.
+
+- show_node_labels:
+
+  Whether to add text labels for internal nodes. Only takes effect when
+  `show_labels = TRUE`. Default `FALSE`.
+
+- label_size:
+
+  Text size for labels. Default `3`.
+
+- min_label_angle:
+
+  Minimum angular extent (degrees) for a node to receive a label. Nodes
+  with `delta_angle < min_label_angle` are not labelled. Default `0` (no
+  filtering).
+
+- label_repel:
+
+  Use
+  [`ggrepel::geom_text_repel()`](https://ggrepel.slowkow.com/reference/geom_text_repel.html)
+  for collision avoidance. Requires the `ggrepel` package. Default
+  `FALSE`.
 
 - ...:
 

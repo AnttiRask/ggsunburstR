@@ -86,7 +86,9 @@ The input ggplot with an additional `geom_tile()` layer.
 
 Since `tile()` maps fill to values, it will conflict with the fill
 aesthetic of the base plot. Use a base plot without fill mapping (e.g.,
-`icicle(sb)`) or `ggnewscale::new_scale_fill()` before calling.
+`icicle(sb)`) or
+[`ggnewscale::new_scale_fill()`](https://eliocamp.github.io/ggnewscale/reference/new_scale.html)
+before calling.
 
 ## See also
 
