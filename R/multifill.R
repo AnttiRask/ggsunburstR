@@ -16,6 +16,9 @@
 #'   Users can add `scale_fill_*()` calls after the plot to control
 #'   each depth's colour palette.
 #'
+#' @seealso [icicle_multifill()] for the rectangular variant,
+#'   [sunburst()] for single-scale fill.
+#'
 #' @examples
 #' sb <- sunburst_data("((a, b, c), (d, e));")
 #' if (requireNamespace("ggnewscale", quietly = TRUE)) {
@@ -41,6 +44,9 @@ sunburst_multifill <- function(sb, fills, colour = "white",
 #' @inheritParams sunburst_multifill
 #'
 #' @return A `ggplot` object with `scale_y_reverse()` and `theme_void()`.
+#'
+#' @seealso [sunburst_multifill()] for the polar variant,
+#'   [icicle()] for single-scale fill.
 #'
 #' @examples
 #' sb <- sunburst_data("((a, b, c), (d, e));")

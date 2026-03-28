@@ -36,3 +36,7 @@ if (requireNamespace("ggnewscale", quietly = TRUE)) {
 }
 
 }
+\seealso{
+\code{\link[=icicle_multifill]{icicle_multifill()}} for the rectangular variant,
+\code{\link[=sunburst]{sunburst()}} for single-scale fill.
+}

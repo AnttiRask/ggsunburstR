@@ -34,3 +34,7 @@ if (requireNamespace("ggnewscale", quietly = TRUE)) {
 }
 
 }
+\seealso{
+\code{\link[=sunburst_multifill]{sunburst_multifill()}} for the polar variant,
+\code{\link[=icicle]{icicle()}} for single-scale fill.
+}
