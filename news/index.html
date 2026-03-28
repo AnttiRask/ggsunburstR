@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ggsunburstR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -34,14 +34,38 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.3.0" id="ggsunburstr-030">ggsunburstR 0.3.0<a class="anchor" aria-label="anchor" href="#ggsunburstr-030"></a></h2>
+<div class="section level3">
+<h3 id="new-plot-types-0-3-0">New plot types<a class="anchor" aria-label="anchor" href="#new-plot-types-0-3-0"></a></h3>
+<ul><li>
+<code><a href="../reference/donut.html">donut()</a></code> creates ring charts – sunbursts restricted to the outermost 1–N depth levels with configurable centre hole size.</li>
+<li>
+<code><a href="../reference/ggtree.html">ggtree()</a></code> creates classical dendrograms using <code>geom_segment()</code>. Supports horizontal layout (<code>rotate = TRUE</code>), circular layout (<code>polar = TRUE</code>), leaf labels, and scale bars.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="new-functions-0-3-0">New functions<a class="anchor" aria-label="anchor" href="#new-functions-0-3-0"></a></h3>
+<ul><li>
+<code><a href="../reference/drilldown.html">drilldown()</a></code> extracts a subtree and recomputes coordinates so the selected node fills the full angular space. Returns a new <code>sunburst_data</code> object compatible with all plot functions. Supports chaining.</li>
+<li>
+<code><a href="../reference/bars.html">bars()</a></code> adds bar chart annotations adjacent to leaf nodes. Values are max-normalised per variable. Supports multiple variables, labels, and value display.</li>
+<li>
+<code><a href="../reference/tile.html">tile()</a></code> adds heatmap-style tile annotations adjacent to leaf nodes. Works with both numeric and categorical variables.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="testing-0-3-0">Testing<a class="anchor" aria-label="anchor" href="#testing-0-3-0"></a></h3>
+<ul><li>Added 76 new tests (499 total).</li>
+<li>R CMD check: 0 errors, 0 warnings, 0 notes.</li>
+</ul></div>
+</div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.0" id="ggsunburstr-020">ggsunburstR 0.2.0<a class="anchor" aria-label="anchor" href="#ggsunburstr-020"></a></h2>
 <div class="section level3">
 <h3 id="new-input-formats-0-2-0">New input formats<a class="anchor" aria-label="anchor" href="#new-input-formats-0-2-0"></a></h3>
-<ul><li>Accept <code><a href="https://rdrr.io/pkg/ape/man/read.tree.html" class="external-link">ape::phylo</a></code> objects directly — no Newick conversion needed (<code>sunburst_data(phylo_obj)</code>).</li>
-<li>Path-delimited strings — <code>sunburst_data(c("A/B/C", "A/B/D"))</code> with configurable separator via <code>sep</code>.</li>
-<li>Path-column data.frames — <code>sunburst_data(data.frame(path = ...))</code> with extra columns carried as node attributes.</li>
+<ul><li>Accept <code><a href="https://rdrr.io/pkg/ape/man/read.tree.html" class="external-link">ape::phylo</a></code> objects directly – no Newick conversion needed (<code>sunburst_data(phylo_obj)</code>).</li>
+<li>Path-delimited strings – <code>sunburst_data(c("A/B/C", "A/B/D"))</code> with configurable separator via <code>sep</code>.</li>
+<li>Path-column data.frames – <code>sunburst_data(data.frame(path = ...))</code> with extra columns carried as node attributes.</li>
 <li>
-<code><a href="https://rdrr.io/pkg/data.tree/man/Node.html" class="external-link">data.tree::Node</a></code> objects — R6-based trees with custom scalar fields preserved as attributes.</li>
+<code><a href="https://rdrr.io/pkg/data.tree/man/Node.html" class="external-link">data.tree::Node</a></code> objects – R6-based trees with custom scalar fields preserved as attributes.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="new-functions-0-2-0">New functions<a class="anchor" aria-label="anchor" href="#new-functions-0-2-0"></a></h3>
@@ -74,7 +98,7 @@
 <li>Label support with pre-computed positions and flip logic for readability.</li>
 <li>Tree transforms: <code>ladderize</code> and <code>ultrametric</code> options.</li>
 <li>S3 class <code>sunburst_data</code> with <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code>, <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>, <code><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame()</a></code>, and <code>$data</code> alias.</li>
-<li>Standard ggplot2 objects — customise with <code>+</code>.</li>
+<li>Standard ggplot2 objects – customise with <code>+</code>.</li>
 <li>342 tests, R CMD check clean.</li>
 </ul></div>
 </div>

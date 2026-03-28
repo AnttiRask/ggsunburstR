@@ -6,17 +6,32 @@ Parse hierarchical data and compute coordinates
 
 - [`sunburst_data()`](https://anttirask.github.io/ggsunburstR/reference/sunburst_data.md)
   : Parse hierarchical input into sunburst/icicle data
+- [`drilldown()`](https://anttirask.github.io/ggsunburstR/reference/drilldown.md)
+  : Drill down into a subtree
 
 ## Plot functions
 
-Create sunburst and icicle plots
+Create sunburst, icicle, donut, and tree plots
 
 - [`sunburst()`](https://anttirask.github.io/ggsunburstR/reference/sunburst.md)
   : Create a polar sunburst plot
 - [`icicle()`](https://anttirask.github.io/ggsunburstR/reference/icicle.md)
   : Create a rectangular icicle plot
+- [`donut()`](https://anttirask.github.io/ggsunburstR/reference/donut.md)
+  : Create a donut (ring) chart
+- [`ggtree()`](https://anttirask.github.io/ggsunburstR/reference/ggtree.md)
+  : Create a tree-style dendrogram plot
+
+## Annotation layers
+
+Add annotations to existing plots
+
 - [`highlight_nodes()`](https://anttirask.github.io/ggsunburstR/reference/highlight_nodes.md)
   : Highlight specific nodes in a sunburst or icicle plot
+- [`bars()`](https://anttirask.github.io/ggsunburstR/reference/bars.md)
+  : Add bar chart annotations to a sunburst or icicle plot
+- [`tile()`](https://anttirask.github.io/ggsunburstR/reference/tile.md)
+  : Add tile (heatmap) annotations to a sunburst or icicle plot
 
 ## Utilities
 

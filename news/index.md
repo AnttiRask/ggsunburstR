@@ -1,18 +1,49 @@
 # Changelog
 
+## ggsunburstR 0.3.0
+
+### New plot types
+
+- [`donut()`](https://anttirask.github.io/ggsunburstR/reference/donut.md)
+  creates ring charts – sunbursts restricted to the outermost 1–N depth
+  levels with configurable centre hole size.
+- [`ggtree()`](https://anttirask.github.io/ggsunburstR/reference/ggtree.md)
+  creates classical dendrograms using `geom_segment()`. Supports
+  horizontal layout (`rotate = TRUE`), circular layout (`polar = TRUE`),
+  leaf labels, and scale bars.
+
+### New functions
+
+- [`drilldown()`](https://anttirask.github.io/ggsunburstR/reference/drilldown.md)
+  extracts a subtree and recomputes coordinates so the selected node
+  fills the full angular space. Returns a new `sunburst_data` object
+  compatible with all plot functions. Supports chaining.
+- [`bars()`](https://anttirask.github.io/ggsunburstR/reference/bars.md)
+  adds bar chart annotations adjacent to leaf nodes. Values are
+  max-normalised per variable. Supports multiple variables, labels, and
+  value display.
+- [`tile()`](https://anttirask.github.io/ggsunburstR/reference/tile.md)
+  adds heatmap-style tile annotations adjacent to leaf nodes. Works with
+  both numeric and categorical variables.
+
+### Testing
+
+- Added 76 new tests (499 total).
+- R CMD check: 0 errors, 0 warnings, 0 notes.
+
 ## ggsunburstR 0.2.0
 
 ### New input formats
 
 - Accept [`ape::phylo`](https://rdrr.io/pkg/ape/man/read.tree.html)
-  objects directly — no Newick conversion needed
+  objects directly – no Newick conversion needed
   (`sunburst_data(phylo_obj)`).
-- Path-delimited strings — `sunburst_data(c("A/B/C", "A/B/D"))` with
+- Path-delimited strings – `sunburst_data(c("A/B/C", "A/B/D"))` with
   configurable separator via `sep`.
-- Path-column data.frames — `sunburst_data(data.frame(path = ...))` with
+- Path-column data.frames – `sunburst_data(data.frame(path = ...))` with
   extra columns carried as node attributes.
 - [`data.tree::Node`](https://rdrr.io/pkg/data.tree/man/Node.html)
-  objects — R6-based trees with custom scalar fields preserved as
+  objects – R6-based trees with custom scalar fields preserved as
   attributes.
 
 ### New functions
@@ -56,5 +87,5 @@ Initial release.
   [`plot()`](https://rdrr.io/r/graphics/plot.default.html),
   [`as.data.frame()`](https://rdrr.io/r/base/as.data.frame.html), and
   `$data` alias.
-- Standard ggplot2 objects — customise with `+`.
+- Standard ggplot2 objects – customise with `+`.
 - 342 tests, R CMD check clean.
