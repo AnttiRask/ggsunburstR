@@ -66,6 +66,48 @@ test_that("icicle() with show_labels adds geom_text layer", {
   expect_true(length(p_yes$layers) > length(p_no$layers))
 })
 
+# --- show_node_labels ---
+
+test_that("icicle() with show_node_labels = TRUE adds node label layer", {
+  sb <- make_sb()
+  p_leaf <- icicle(sb, show_labels = TRUE)
+  p_both <- icicle(sb, show_labels = TRUE, show_node_labels = TRUE)
+  expect_equal(length(p_both$layers), length(p_leaf$layers) + 1)
+})
+
+test_that("icicle() show_node_labels without show_labels has no effect", {
+  sb <- make_sb()
+  p_no <- icicle(sb)
+  p_nodes <- icicle(sb, show_node_labels = TRUE)
+  expect_equal(length(p_nodes$layers), length(p_no$layers))
+})
+
+# --- label_size ---
+
+test_that("icicle() label_size controls text size", {
+  sb <- make_sb()
+  p <- icicle(sb, show_labels = TRUE, label_size = 5)
+  built <- ggplot2::ggplot_build(p)
+  label_data <- built$data[[2]]
+  expect_true(all(label_data$size == 5))
+})
+
+# --- min_label_angle ---
+
+test_that("icicle() min_label_angle filters narrow sectors", {
+  sb <- make_sb()
+  p_all <- icicle(sb, show_labels = TRUE, min_label_angle = 0)
+  p_filtered <- icicle(sb, show_labels = TRUE, min_label_angle = 100)
+  expect_true(length(p_filtered$layers) < length(p_all$layers))
+})
+
+# --- Input validation ---
+
+test_that("icicle() errors on negative min_label_angle", {
+  sb <- make_sb()
+  expect_error(icicle(sb, min_label_angle = -5), "non-negative")
+})
+
 # --- Customisable with + ---
 
 test_that("icicle() result is customisable with +", {

@@ -10,6 +10,12 @@
 #' @param colour Border colour for rectangles. Default `"white"`.
 #' @param linewidth Border line width. Default `0.2`.
 #' @param show_labels Whether to add text labels. Default `FALSE`.
+#' @param show_node_labels Whether to add text labels for internal nodes.
+#'   Only takes effect when `show_labels = TRUE`. Default `FALSE`.
+#' @param label_size Text size for labels. Default `3`.
+#' @param min_label_angle Minimum angular extent (degrees) for a node to
+#'   receive a label. Uses the same `delta_angle` column as sunburst
+#'   filtering. Default `0` (no filtering).
 #' @param ... Passed to `geom_rect()`.
 #'
 #' @return A `ggplot` object with `scale_y_reverse()` and `theme_void()`.
@@ -21,10 +27,15 @@
 #'
 #' @export
 icicle <- function(sb, fill = NULL, colour = "white", linewidth = 0.2,
-                   show_labels = FALSE, ...) {
+                   show_labels = FALSE, show_node_labels = FALSE,
+                   label_size = 3, min_label_angle = 0, ...) {
   # Input validation
   if (!inherits(sb, "sunburst_data")) {
     abort("'sb' must be a sunburst_data object. Use sunburst_data() to create one.")
+  }
+
+  if (!is.numeric(min_label_angle) || min_label_angle < 0) {
+    abort("'min_label_angle' must be a non-negative number.")
   }
 
   # Validate fill column
@@ -54,17 +65,46 @@ icicle <- function(sb, fill = NULL, colour = "white", linewidth = 0.2,
       )
   }
 
-  # Horizontal labels (no rotation) for icicle
+  # Horizontal leaf labels (no rotation) for icicle
   if (show_labels && nrow(sb$leaf_labels) > 0) {
-    p <- p +
-      ggplot2::geom_text(
-        data = sb$leaf_labels,
-        ggplot2::aes(
-          x = .data[["x"]], y = .data[["y"]],
-          label = .data[["label"]]
-        ),
-        size = 3
-      )
+    leaf_data <- sb$leaf_labels
+    # Filter by min_label_angle
+    if (min_label_angle > 0 && "delta_angle" %in% names(leaf_data)) {
+      leaf_data <- leaf_data[leaf_data$delta_angle >= min_label_angle, ]
+    }
+
+    if (nrow(leaf_data) > 0) {
+      p <- p +
+        ggplot2::geom_text(
+          data = leaf_data,
+          ggplot2::aes(
+            x = .data[["x"]], y = .data[["y"]],
+            label = .data[["label"]]
+          ),
+          size = label_size
+        )
+    }
+  }
+
+  # Internal node labels
+  if (show_labels && show_node_labels && nrow(sb$node_labels) > 0) {
+    node_data <- sb$node_labels
+    # Filter by min_label_angle
+    if (min_label_angle > 0 && "delta_angle" %in% names(node_data)) {
+      node_data <- node_data[node_data$delta_angle >= min_label_angle, ]
+    }
+
+    if (nrow(node_data) > 0) {
+      p <- p +
+        ggplot2::geom_text(
+          data = node_data,
+          ggplot2::aes(
+            x = .data[["x"]], y = .data[["y"]],
+            label = .data[["label"]]
+          ),
+          size = label_size
+        )
+    }
   }
 
   # Root at top, leaves at bottom
