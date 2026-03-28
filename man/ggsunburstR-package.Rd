@@ -6,6 +6,8 @@
 \alias{ggsunburstR-package}
 \title{ggsunburstR: Sunburst and Icicle Adjacency Diagrams with ggplot2}
 \description{
+\if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
+
 Create sunburst and icicle adjacency diagrams using ggplot2. Accepts hierarchical data in multiple formats (Newick strings/files, data frames, lineage files, node-parent files), computes rectangle coordinates for each node, and produces standard ggplot2 objects that users can customise with familiar '+' syntax. A pure-R reimplementation of 'ggsunburst' that eliminates the Python/reticulate dependency.
 }
 \seealso{

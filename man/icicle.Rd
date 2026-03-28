@@ -10,6 +10,9 @@ icicle(
   colour = "white",
   linewidth = 0.2,
   show_labels = FALSE,
+  show_node_labels = FALSE,
+  label_size = 3,
+  min_label_angle = 0,
   ...
 )
 }
@@ -24,6 +27,15 @@ icicle(
 \item{linewidth}{Border line width. Default \code{0.2}.}
 
 \item{show_labels}{Whether to add text labels. Default \code{FALSE}.}
+
+\item{show_node_labels}{Whether to add text labels for internal nodes.
+Only takes effect when \code{show_labels = TRUE}. Default \code{FALSE}.}
+
+\item{label_size}{Text size for labels. Default \code{3}.}
+
+\item{min_label_angle}{Minimum angular extent (degrees) for a node to
+receive a label. Uses the same \code{delta_angle} column as sunburst
+filtering. Default \code{0} (no filtering).}
 
 \item{...}{Passed to \code{geom_rect()}.}
 }

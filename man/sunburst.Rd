@@ -10,7 +10,10 @@ sunburst(
   colour = "white",
   linewidth = 0.2,
   show_labels = FALSE,
+  show_node_labels = FALSE,
   label_type = c("radial", "perpendicular"),
+  label_size = 3,
+  min_label_angle = 0,
   ...
 )
 }
@@ -27,8 +30,17 @@ sunburst(
 \item{show_labels}{Whether to add text labels for leaf nodes.
 Default \code{FALSE}.}
 
+\item{show_node_labels}{Whether to add text labels for internal nodes.
+Only takes effect when \code{show_labels = TRUE}. Default \code{FALSE}.}
+
 \item{label_type}{Label orientation. \code{"radial"}: text reads outward.
-\code{"perpendicular"}: text follows arc (post-MVP quality).}
+\code{"perpendicular"}: text follows the arc.}
+
+\item{label_size}{Text size for labels. Default \code{3}.}
+
+\item{min_label_angle}{Minimum angular extent (degrees) for a node to
+receive a label. Nodes with \code{delta_angle < min_label_angle} are not
+labelled. Default \code{0} (no filtering).}
 
 \item{...}{Passed to \code{geom_rect()}.}
 }
@@ -43,5 +55,6 @@ Creates a sunburst (radial) plot from a \code{sunburst_data} object using
 sb <- sunburst_data("((a, b, c), (d, e));")
 sunburst(sb)
 sunburst(sb, fill = "depth")
+sunburst(sb, show_labels = TRUE, label_type = "perpendicular")
 
 }
