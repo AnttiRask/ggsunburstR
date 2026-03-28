@@ -36,6 +36,24 @@ vjust_rtext <- function(angle) {
   0.5
 }
 
+# Resolve the fill quosure to a string or NULL.
+# Handles: NULL, bare names (symbols), and string literals.
+# Must be called with a quosure captured by rlang::enquo() in the
+# calling function — enquo() cannot be deferred to this helper.
+.resolve_fill <- function(fill_quo) {
+  if (rlang::quo_is_null(fill_quo)) {
+    return(NULL)
+  }
+  if (rlang::quo_is_symbol(fill_quo)) {
+    return(rlang::as_name(fill_quo))
+  }
+  expr <- rlang::quo_get_expr(fill_quo)
+  if (rlang::is_string(expr)) {
+    return(expr)
+  }
+  rlang::abort("'fill' must be NULL, a column name, or a string.")
+}
+
 # Build a geom_rect layer with fill dispatch.
 # fill = NULL or "none" → static grey, "auto" → depth, string → mapped.
 .build_rect_layer <- function(data, fill, colour, linewidth, ...) {

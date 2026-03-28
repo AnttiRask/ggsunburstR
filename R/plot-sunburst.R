@@ -4,11 +4,12 @@
 #' `ggplot2::geom_rect()` with `coord_polar()` and `theme_void()`.
 #'
 #' @param sb A `sunburst_data` object from `sunburst_data()`.
-#' @param fill Fill mapping. One of:
+#' @param fill Fill mapping. Accepts bare names or strings. One of:
 #'   - `NULL` (default): static grey fill (no aesthetic mapping).
 #'   - `"auto"`: maps fill to the `depth` column.
 #'   - `"none"`: explicit static grey fill (same as `NULL`).
-#'   - A column name in `sb$rects` (e.g., `"name"`, `"depth"`).
+#'   - A column name: either bare (`fill = depth`) or quoted
+#'     (`fill = "depth"`).
 #' @param colour Border colour for rectangles. Default `"white"`.
 #' @param linewidth Border line width. Default `0.2`.
 #' @param show_labels Whether to add text labels for leaf nodes.
@@ -44,6 +45,10 @@ sunburst <- function(sb, fill = NULL, colour = "white", linewidth = 0.2,
   if (!inherits(sb, "sunburst_data")) {
     abort("'sb' must be a sunburst_data object. Use sunburst_data() to create one.")
   }
+
+  # Resolve fill: bare name, string, or NULL
+
+  fill <- .resolve_fill(rlang::enquo(fill))
 
   label_type <- match.arg(label_type)
 

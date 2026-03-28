@@ -20,12 +20,13 @@ icicle(
 \arguments{
 \item{sb}{A \code{sunburst_data} object from \code{sunburst_data()}.}
 
-\item{fill}{Fill mapping. One of:
+\item{fill}{Fill mapping. Accepts bare names or strings. One of:
 \itemize{
 \item \code{NULL} (default): static grey fill (no aesthetic mapping).
 \item \code{"auto"}: maps fill to the \code{depth} column.
 \item \code{"none"}: explicit static grey fill (same as \code{NULL}).
-\item A column name in \code{sb$rects} (e.g., \code{"name"}, \code{"depth"}).
+\item A column name: either bare (\code{fill = depth}) or quoted
+(\code{fill = "depth"}).
 }}
 
 \item{colour}{Border colour for rectangles. Default \code{"white"}.}

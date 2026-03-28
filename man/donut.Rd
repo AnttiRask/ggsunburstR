@@ -21,8 +21,9 @@ donut(
 \item{levels}{Number of depth levels to display (from the outermost
 inward). \code{1} = single ring, \code{2} = two concentric rings.}
 
-\item{fill}{Fill mapping. \code{NULL} or \code{"none"} for static grey, \code{"auto"}
-for depth mapping, or a column name in \code{sb$rects}.}
+\item{fill}{Fill mapping. Accepts bare names or strings. \code{NULL} or
+\code{"none"} for static grey, \code{"auto"} for depth mapping, or a column
+name (bare or quoted).}
 
 \item{colour}{Border colour for segments. Default \code{"white"}.}
 

@@ -7,8 +7,9 @@
 #' @param sb A `sunburst_data` object from `sunburst_data()`.
 #' @param levels Number of depth levels to display (from the outermost
 #'   inward). `1` = single ring, `2` = two concentric rings.
-#' @param fill Fill mapping. `NULL` or `"none"` for static grey, `"auto"`
-#'   for depth mapping, or a column name in `sb$rects`.
+#' @param fill Fill mapping. Accepts bare names or strings. `NULL` or
+#'   `"none"` for static grey, `"auto"` for depth mapping, or a column
+#'   name (bare or quoted).
 #' @param colour Border colour for segments. Default `"white"`.
 #' @param linewidth Border line width. Default `0.2`.
 #' @param show_labels Whether to display labels. Default `FALSE`.
@@ -34,6 +35,7 @@ donut <- function(sb, levels = 1, fill = NULL, colour = "white",
     abort("'sb' must be a sunburst_data object. Use sunburst_data() to create one.")
   }
 
+  fill <- .resolve_fill(rlang::enquo(fill))
   .validate_fill(fill, sb$rects)
 
   # Single-node tree: no displayable nodes (root is excluded from rects)
