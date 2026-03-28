@@ -47,6 +47,24 @@ test_that("sunburst() with fill = 'name' works", {
   expect_no_error(ggplot2::ggplot_build(p))
 })
 
+# --- Bare name fill (tidy eval) ---
+
+test_that("sunburst() fill = depth (bare name) maps fill", {
+  sb <- make_sb()
+  p <- sunburst(sb, fill = depth)
+  built <- ggplot2::ggplot_build(p)
+  expect_true(length(unique(built$data[[1]]$fill)) > 1)
+})
+
+test_that("sunburst() bare name produces identical result to string", {
+  sb <- make_sb()
+  p_bare <- sunburst(sb, fill = depth)
+  p_string <- sunburst(sb, fill = "depth")
+  built_bare <- ggplot2::ggplot_build(p_bare)
+  built_string <- ggplot2::ggplot_build(p_string)
+  expect_equal(built_bare$data[[1]]$fill, built_string$data[[1]]$fill)
+})
+
 # --- fill = "auto" ---
 
 test_that("sunburst() fill = 'auto' maps to depth", {

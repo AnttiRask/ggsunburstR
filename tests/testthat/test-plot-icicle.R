@@ -44,6 +44,14 @@ test_that("icicle() with fill = 'depth' maps fill aesthetic", {
   expect_true(length(unique(built$data[[1]]$fill)) > 1)
 })
 
+# --- Bare name fill (tidy eval) ---
+
+test_that("icicle() fill = name (bare name) maps fill", {
+  sb <- make_sb()
+  p <- icicle(sb, fill = name)
+  expect_no_error(ggplot2::ggplot_build(p))
+})
+
 # --- fill = "auto" ---
 
 test_that("icicle() fill = 'auto' maps to depth", {

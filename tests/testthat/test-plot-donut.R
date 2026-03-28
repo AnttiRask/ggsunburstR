@@ -70,6 +70,13 @@ test_that("donut() with fill maps fill aesthetic", {
   expect_no_error(ggplot2::ggplot_build(p))
 })
 
+test_that("donut() fill = depth (bare name) maps fill", {
+  sb <- make_sb()
+  p <- donut(sb, fill = depth, levels = 2)
+  built <- ggplot2::ggplot_build(p)
+  expect_true(length(unique(built$data[[1]]$fill)) > 1)
+})
+
 test_that("donut() fill = 'auto' maps to depth", {
   sb <- make_sb()
   # levels = 2 to include multiple depths so fill varies
