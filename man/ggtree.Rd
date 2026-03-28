@@ -14,6 +14,8 @@ ggtree(
   rotate = TRUE,
   polar = FALSE,
   blank = TRUE,
+  show_scale = FALSE,
+  scale_length = 0,
   ...
 )
 }
@@ -37,6 +39,12 @@ layout (root left, leaves right).}
 Overrides \code{rotate}.}
 
 \item{blank}{If \code{TRUE} (default), apply \code{theme_void()}.}
+
+\item{show_scale}{If \code{TRUE}, display a scale bar indicating
+branch-length units. Default \code{FALSE}.}
+
+\item{scale_length}{Length of the scale bar. When \code{0} (default),
+auto-computed as one tenth of the total tree depth.}
 
 \item{...}{Passed to \code{geom_segment()}.}
 }

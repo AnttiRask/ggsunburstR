@@ -17,6 +17,10 @@
 #'   layout (root left, leaves right).
 #' @param polar If `TRUE`, apply `coord_polar()` for circular layout.
 #'   Overrides `rotate`.
+#' @param show_scale If `TRUE`, display a scale bar indicating
+#'   branch-length units. Default `FALSE`.
+#' @param scale_length Length of the scale bar. When `0` (default),
+#'   auto-computed as one tenth of the total tree depth.
 #' @param blank If `TRUE` (default), apply `theme_void()`.
 #' @param ... Passed to `geom_segment()`.
 #'
@@ -35,6 +39,7 @@ ggtree <- function(sb, colour = "black", linewidth = 0.5,
                    show_labels = TRUE, label_size = 3,
                    label_colour = "black",
                    rotate = TRUE, polar = FALSE, blank = TRUE,
+                   show_scale = FALSE, scale_length = 0,
                    ...) {
   if (!inherits(sb, "sunburst_data")) {
     abort("'sb' must be a sunburst_data object. Use sunburst_data() to create one.")
@@ -108,14 +113,48 @@ ggtree <- function(sb, colour = "black", linewidth = 0.5,
       )
   }
 
-  # 4. Coordinate transform
+  # 4. Scale bar
+  if (show_scale && !polar) {
+    y_range <- range(seg$ry, seg$ryend, na.rm = TRUE)
+    total_depth <- abs(diff(y_range))
+    bar_len <- if (scale_length > 0) scale_length else total_depth / 10
+    # Position at bottom-left of plot
+    x_pos <- min(seg$rx, na.rm = TRUE)
+    y_pos <- min(seg$ry, na.rm = TRUE) - total_depth * 0.1
+    scale_data <- data.frame(
+      x = x_pos, xend = x_pos,
+      y = y_pos, yend = y_pos + bar_len,
+      stringsAsFactors = FALSE
+    )
+    p <- p +
+      ggplot2::geom_segment(
+        data = scale_data,
+        ggplot2::aes(
+          x = .data[["x"]], xend = .data[["xend"]],
+          y = .data[["y"]], yend = .data[["yend"]]
+        ),
+        linewidth = linewidth * 2, colour = colour,
+        inherit.aes = FALSE
+      ) +
+      ggplot2::geom_text(
+        data = scale_data,
+        ggplot2::aes(
+          x = .data[["x"]], y = .data[["y"]] - total_depth * 0.02,
+          label = round(bar_len, 2)
+        ),
+        size = label_size * 0.8, hjust = 0.5,
+        inherit.aes = FALSE
+      )
+  }
+
+  # 5. Coordinate transform
   if (polar) {
     p <- p + ggplot2::coord_polar()
   } else if (rotate) {
     p <- p + ggplot2::coord_flip()
   }
 
-  # 5. Theme
+  # 6. Theme
   if (blank) {
     p <- p + ggplot2::theme_void()
   }
