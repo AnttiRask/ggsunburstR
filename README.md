@@ -1,4 +1,4 @@
-# ggsunburstR <a href="https://anttirask.github.io/ggsunburstR/"><img src="man/figures/ggsunburstR_hex.png" align="right" height="138" alt="ggsunburstR hex sticker" /></a>
+# ggsunburstR <a href="https://anttirask.github.io/ggsunburstR/"><img src="man/figures/logo.png" align="right" height="138" alt="ggsunburstR website" /></a>
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/AnttiRask/ggsunburstR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/AnttiRask/ggsunburstR/actions/workflows/R-CMD-check.yaml)
