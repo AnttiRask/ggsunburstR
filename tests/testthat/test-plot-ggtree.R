@@ -107,3 +107,30 @@ test_that("ggtree() with branch lengths produces different segment lengths", {
   lengths <- abs(seg_data$yend - seg_data$y)
   expect_true(length(unique(round(lengths, 2))) > 1)
 })
+
+# --- Tree without branch lengths ---
+
+test_that("ggtree() works with tree without branch lengths", {
+  sb <- sunburst_data("((a, b, c), (d, e));")
+  p <- ggtree(sb, rotate = FALSE, show_labels = FALSE)
+  built <- ggplot2::ggplot_build(p)
+  # All vertical segments should have equal length (all dist=1.0)
+  seg_data <- built$data[[2]]
+  lengths <- abs(seg_data$yend - seg_data$y)
+  expect_equal(length(unique(round(lengths, 2))), 1)
+})
+
+# --- Scale bar ---
+
+test_that("ggtree() with show_scale adds scale bar layers", {
+  sb <- sunburst_data("((a:1, b:3):1, c:2);")
+  p_no <- ggtree(sb, show_labels = FALSE, show_scale = FALSE)
+  p_yes <- ggtree(sb, show_labels = FALSE, show_scale = TRUE)
+  expect_true(length(p_yes$layers) > length(p_no$layers))
+})
+
+test_that("ggtree() with show_scale and custom scale_length", {
+  sb <- sunburst_data("((a:1, b:3):1, c:2);")
+  p <- ggtree(sb, show_labels = FALSE, show_scale = TRUE, scale_length = 0.5)
+  expect_no_error(ggplot2::ggplot_build(p))
+})
