@@ -125,6 +125,11 @@ test_that("bars() result is composable with +", {
 
 # --- Input validation ---
 
+test_that("bars() validates p is ggplot", {
+  sb <- make_sb_with_vars()
+  expect_error(bars("not a plot", sb, "score"), class = "rlang_error")
+})
+
 test_that("bars() validates sb is sunburst_data", {
   expect_error(bars(ggplot2::ggplot(), data.frame(x = 1), "x"),
                class = "rlang_error")

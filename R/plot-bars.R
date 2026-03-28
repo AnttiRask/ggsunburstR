@@ -39,6 +39,9 @@ bars <- function(p, sb, variables, y_offset = 0, bar_height = 1,
                  box_colour = "black", bar_colour = "black",
                  show_labels = FALSE, show_values = FALSE,
                  label_size = 3, value_size = 2.5, ...) {
+  if (!inherits(p, "ggplot")) {
+    abort("'p' must be a ggplot object from sunburst(), icicle(), or ggtree().")
+  }
   if (!inherits(sb, "sunburst_data")) {
     abort("'sb' must be a sunburst_data object.")
   }
