@@ -4,11 +4,10 @@
 [![R-CMD-check](https://github.com/AnttiRask/ggsunburstR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/AnttiRask/ggsunburstR/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-Create sunburst and icicle adjacency diagrams using ggplot2. Accepts
-hierarchical data in multiple formats (Newick strings/files, data frames,
-lineage files, node-parent files), computes rectangle coordinates for each
-node, and produces standard ggplot2 objects that you can customise with the
-familiar `+` syntax.
+Create sunburst, icicle, donut, and tree adjacency diagrams using
+ggplot2. Accepts hierarchical data in multiple formats, computes
+rectangle coordinates for each node, and produces standard ggplot2
+objects that you can customise with the familiar `+` syntax.
 
 A pure-R reimplementation of
 [ggsunburst](https://github.com/didacs/ggsunburst) that eliminates the
@@ -36,11 +35,17 @@ sunburst(sb, fill = "depth")
 
 # Icicle (rectangular) plot
 icicle(sb, fill = "depth")
+
+# Donut (ring) chart
+donut(sb, fill = "name")
+
+# Tree (dendrogram)
+ggtree(sb)
 ```
 
 ## Input formats
 
-ggsunburstR accepts four input formats:
+ggsunburstR accepts seven input formats:
 
 ```r
 # 1. Newick string
@@ -56,21 +61,21 @@ df <- data.frame(
 )
 sb <- sunburst_data(df)
 
-# 4. Node-parent CSV file
-sb <- sunburst_data("path/to/data.csv", type = "node_parent")
-```
+# 4. Path-delimited strings
+sb <- sunburst_data(c("A/B/C", "A/B/D", "A/E"))
 
-## Customisation
+# 5. Data frame with path column
+sb <- sunburst_data(data.frame(path = c("A/B/C", "A/B/D")))
 
-The output is a standard ggplot2 object, so you can add layers, scales,
-themes, and labels:
+# 6. ape::phylo object
+phylo <- ape::read.tree(text = "(A, B, C);")
+sb <- sunburst_data(phylo)
 
-```r
-sb <- sunburst_data("((a, b, c), (d, e, f));")
-
-sunburst(sb, fill = "name") +
-  ggplot2::scale_fill_brewer(palette = "Set3") +
-  ggplot2::labs(title = "My Sunburst")
+# 7. data.tree::Node object
+root <- data.tree::Node$new("root")
+root$AddChild("A")
+root$AddChild("B")
+sb <- sunburst_data(root)
 ```
 
 ## Value-weighted sectors
@@ -83,6 +88,57 @@ sb <- sunburst_data(
   values = c(a = 10, b = 5, c = 3, d = 8, e = 2, f = 1)
 )
 sunburst(sb, fill = "name")
+```
+
+## Drilldown into subtrees
+
+Zoom into a specific branch:
+
+```r
+sb <- sunburst_data("((a, b)X, (c, d)Y)root;")
+sub <- drilldown(sb, node = "X")
+sunburst(sub, fill = "name")
+```
+
+## Annotations
+
+Add bar charts or heatmap tiles adjacent to leaf nodes:
+
+```r
+df <- data.frame(
+  parent = c(NA, "root", "root"),
+  child  = c("root", "A", "B"),
+  score  = c(NA, 0.5, 0.9),
+  group  = c(NA, "x", "y")
+)
+sb <- sunburst_data(df)
+p <- icicle(sb, fill = "depth")
+
+# Bar annotations
+bars(p, sb, variables = "score")
+
+# Tile (heatmap) annotations
+tile(p, sb, variables = "group")
+```
+
+## Highlight specific nodes
+
+```r
+sb <- sunburst_data("((a, b, c), (d, e));")
+p <- sunburst(sb, fill = "depth")
+highlight_nodes(p, nodes = c("a", "c"), fill = "red")
+```
+
+## Customisation
+
+The output is a standard ggplot2 object:
+
+```r
+sb <- sunburst_data("((a, b, c), (d, e, f));")
+
+sunburst(sb, fill = "name") +
+  ggplot2::scale_fill_brewer(palette = "Set3") +
+  ggplot2::labs(title = "My Sunburst")
 ```
 
 ## License
