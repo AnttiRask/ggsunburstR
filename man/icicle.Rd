@@ -13,6 +13,7 @@ icicle(
   show_node_labels = FALSE,
   label_size = 3,
   min_label_angle = 0,
+  label_repel = FALSE,
   ...
 )
 }
@@ -36,6 +37,9 @@ Only takes effect when \code{show_labels = TRUE}. Default \code{FALSE}.}
 \item{min_label_angle}{Minimum angular extent (degrees) for a node to
 receive a label. Nodes with \code{delta_angle < min_label_angle} are not
 labelled. Default \code{0} (no filtering).}
+
+\item{label_repel}{Use \code{ggrepel::geom_text_repel()} for collision
+avoidance. Requires the \code{ggrepel} package. Default \code{FALSE}.}
 
 \item{...}{Passed to \code{geom_rect()}.}
 }

@@ -36,6 +36,26 @@ vjust_rtext <- function(angle) {
   0.5
 }
 
+# Add a text label layer — plain geom_text or ggrepel::geom_text_repel.
+# Used by icicle() to avoid duplicating geom-selection logic.
+.add_text_layer <- function(data, label_size, label_repel = FALSE) {
+  aes_mapping <- ggplot2::aes(
+    x = .data[["x"]], y = .data[["y"]],
+    label = .data[["label"]]
+  )
+  if (isTRUE(label_repel)) {
+    ggrepel::geom_text_repel(
+      data = data, mapping = aes_mapping,
+      size = label_size, max.overlaps = Inf, seed = 42
+    )
+  } else {
+    ggplot2::geom_text(
+      data = data, mapping = aes_mapping,
+      size = label_size
+    )
+  }
+}
+
 # Filter label data by minimum angular extent.
 # Removes rows where delta_angle < min_angle. Returns filtered data.frame.
 .filter_by_angle <- function(data, min_angle) {

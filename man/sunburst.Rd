@@ -14,6 +14,7 @@ sunburst(
   label_type = c("radial", "perpendicular"),
   label_size = 3,
   min_label_angle = 0,
+  label_repel = FALSE,
   ...
 )
 }
@@ -41,6 +42,10 @@ Only takes effect when \code{show_labels = TRUE}. Default \code{FALSE}.}
 \item{min_label_angle}{Minimum angular extent (degrees) for a node to
 receive a label. Nodes with \code{delta_angle < min_label_angle} are not
 labelled. Default \code{0} (no filtering).}
+
+\item{label_repel}{Not supported for sunburst plots. Use
+\code{\link[=icicle]{icicle()}} for label repulsion, or \code{min_label_angle} to reduce
+label clutter on sunbursts. Default \code{FALSE}.}
 
 \item{...}{Passed to \code{geom_rect()}.}
 }

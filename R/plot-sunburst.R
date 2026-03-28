@@ -18,6 +18,9 @@
 #' @param min_label_angle Minimum angular extent (degrees) for a node to
 #'   receive a label. Nodes with `delta_angle < min_label_angle` are not
 #'   labelled. Default `0` (no filtering).
+#' @param label_repel Not supported for sunburst plots. Use
+#'   [icicle()] for label repulsion, or `min_label_angle` to reduce
+#'   label clutter on sunbursts. Default `FALSE`.
 #' @param ... Passed to `geom_rect()`.
 #'
 #' @return A `ggplot` object with `coord_polar()` and `theme_void()`.
@@ -32,7 +35,8 @@
 sunburst <- function(sb, fill = NULL, colour = "white", linewidth = 0.2,
                      show_labels = FALSE, show_node_labels = FALSE,
                      label_type = c("radial", "perpendicular"),
-                     label_size = 3, min_label_angle = 0, ...) {
+                     label_size = 3, min_label_angle = 0,
+                     label_repel = FALSE, ...) {
   # Input validation
   if (!inherits(sb, "sunburst_data")) {
     abort("'sb' must be a sunburst_data object. Use sunburst_data() to create one.")
@@ -42,6 +46,16 @@ sunburst <- function(sb, fill = NULL, colour = "white", linewidth = 0.2,
 
   if (!is.numeric(min_label_angle) || min_label_angle < 0) {
     abort("'min_label_angle' must be a non-negative number.")
+  }
+
+  # label_repel is icicle-only in v0.4 — polar repulsion deferred
+
+  if (isTRUE(label_repel)) {
+    abort(c(
+      "Label repulsion is not supported for polar (sunburst) plots in this version.",
+      "i" = "Use {.arg min_label_angle} to filter labels on narrow sectors.",
+      "i" = "Use {.fun icicle} for plots with label repulsion."
+    ))
   }
 
   # Validate fill column

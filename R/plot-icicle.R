@@ -16,6 +16,8 @@
 #' @param min_label_angle Minimum angular extent (degrees) for a node to
 #'   receive a label. Nodes with `delta_angle < min_label_angle` are not
 #'   labelled. Default `0` (no filtering).
+#' @param label_repel Use `ggrepel::geom_text_repel()` for collision
+#'   avoidance. Requires the `ggrepel` package. Default `FALSE`.
 #' @param ... Passed to `geom_rect()`.
 #'
 #' @return A `ggplot` object with `scale_y_reverse()` and `theme_void()`.
@@ -28,7 +30,8 @@
 #' @export
 icicle <- function(sb, fill = NULL, colour = "white", linewidth = 0.2,
                    show_labels = FALSE, show_node_labels = FALSE,
-                   label_size = 3, min_label_angle = 0, ...) {
+                   label_size = 3, min_label_angle = 0,
+                   label_repel = FALSE, ...) {
   # Input validation
   if (!inherits(sb, "sunburst_data")) {
     abort("'sb' must be a sunburst_data object. Use sunburst_data() to create one.")
@@ -36,6 +39,10 @@ icicle <- function(sb, fill = NULL, colour = "white", linewidth = 0.2,
 
   if (!is.numeric(min_label_angle) || min_label_angle < 0) {
     abort("'min_label_angle' must be a non-negative number.")
+  }
+
+  if (isTRUE(label_repel)) {
+    rlang::check_installed("ggrepel", reason = "for label repulsion")
   }
 
   # Validate fill column
@@ -70,15 +77,7 @@ icicle <- function(sb, fill = NULL, colour = "white", linewidth = 0.2,
     leaf_data <- .filter_by_angle(sb$leaf_labels, min_label_angle)
 
     if (nrow(leaf_data) > 0) {
-      p <- p +
-        ggplot2::geom_text(
-          data = leaf_data,
-          ggplot2::aes(
-            x = .data[["x"]], y = .data[["y"]],
-            label = .data[["label"]]
-          ),
-          size = label_size
-        )
+      p <- p + .add_text_layer(leaf_data, label_size, label_repel)
     }
   }
 
@@ -87,15 +86,7 @@ icicle <- function(sb, fill = NULL, colour = "white", linewidth = 0.2,
     node_data <- .filter_by_angle(sb$node_labels, min_label_angle)
 
     if (nrow(node_data) > 0) {
-      p <- p +
-        ggplot2::geom_text(
-          data = node_data,
-          ggplot2::aes(
-            x = .data[["x"]], y = .data[["y"]],
-            label = .data[["label"]]
-          ),
-          size = label_size
-        )
+      p <- p + .add_text_layer(node_data, label_size, label_repel)
     }
   }
 
