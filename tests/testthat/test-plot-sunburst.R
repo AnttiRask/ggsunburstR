@@ -47,6 +47,34 @@ test_that("sunburst() with fill = 'name' works", {
   expect_no_error(ggplot2::ggplot_build(p))
 })
 
+# --- fill = "auto" ---
+
+test_that("sunburst() fill = 'auto' maps to depth", {
+  sb <- make_sb()
+  p <- sunburst(sb, fill = "auto")
+  built <- ggplot2::ggplot_build(p)
+  expect_true(length(unique(built$data[[1]]$fill)) > 1)
+})
+
+# --- fill = "none" ---
+
+test_that("sunburst() fill = 'none' produces uniform grey", {
+  sb <- make_sb()
+  p <- sunburst(sb, fill = "none")
+  built <- ggplot2::ggplot_build(p)
+  expect_equal(length(unique(built$data[[1]]$fill)), 1)
+})
+
+test_that("sunburst() fill = NULL still produces grey (non-breaking)", {
+  sb <- make_sb()
+  p_null <- sunburst(sb, fill = NULL)
+  p_none <- sunburst(sb, fill = "none")
+  built_null <- ggplot2::ggplot_build(p_null)
+  built_none <- ggplot2::ggplot_build(p_none)
+  expect_equal(unique(built_null$data[[1]]$fill),
+               unique(built_none$data[[1]]$fill))
+})
+
 # --- Non-existent fill column errors ---
 
 test_that("sunburst() errors on non-existent fill column", {

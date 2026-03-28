@@ -44,6 +44,24 @@ test_that("icicle() with fill = 'depth' maps fill aesthetic", {
   expect_true(length(unique(built$data[[1]]$fill)) > 1)
 })
 
+# --- fill = "auto" ---
+
+test_that("icicle() fill = 'auto' maps to depth", {
+  sb <- make_sb()
+  p <- icicle(sb, fill = "auto")
+  built <- ggplot2::ggplot_build(p)
+  expect_true(length(unique(built$data[[1]]$fill)) > 1)
+})
+
+# --- fill = "none" ---
+
+test_that("icicle() fill = 'none' produces uniform grey", {
+  sb <- make_sb()
+  p <- icicle(sb, fill = "none")
+  built <- ggplot2::ggplot_build(p)
+  expect_equal(length(unique(built$data[[1]]$fill)), 1)
+})
+
 # --- Non-existent fill column errors ---
 
 test_that("icicle() errors on non-existent fill column", {

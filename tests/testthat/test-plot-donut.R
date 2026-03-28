@@ -70,6 +70,21 @@ test_that("donut() with fill maps fill aesthetic", {
   expect_no_error(ggplot2::ggplot_build(p))
 })
 
+test_that("donut() fill = 'auto' maps to depth", {
+  sb <- make_sb()
+  # levels = 2 to include multiple depths so fill varies
+  p <- donut(sb, fill = "auto", levels = 2)
+  built <- ggplot2::ggplot_build(p)
+  expect_true(length(unique(built$data[[1]]$fill)) > 1)
+})
+
+test_that("donut() fill = 'none' produces uniform grey", {
+  sb <- make_sb()
+  p <- donut(sb, fill = "none")
+  built <- ggplot2::ggplot_build(p)
+  expect_equal(length(unique(built$data[[1]]$fill)), 1)
+})
+
 test_that("donut() errors on non-existent fill column", {
   sb <- make_sb()
   expect_error(donut(sb, fill = "nonexistent"), class = "rlang_error")
