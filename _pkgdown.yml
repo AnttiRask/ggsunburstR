@@ -18,6 +18,11 @@ reference:
       - donut
       - ggtree
 
+  - title: "ggplot2 geom"
+    desc: "Idiomatic ggplot2 layer for sunburst/icicle plots"
+    contents:
+      - geom_sunburst
+
   - title: "Themes"
     desc: "Custom themes for sunburst plots"
     contents:
