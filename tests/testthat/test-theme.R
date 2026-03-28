@@ -43,11 +43,21 @@ test_that("theme_sunburst() composes with sunburst()", {
 # --- base_size passes through ---
 
 test_that("theme_sunburst() passes base_size to theme_void", {
-  th_default <- theme_sunburst()
-  th_large <- theme_sunburst(base_size = 20)
-  # The text size of plot.title should differ
-  expect_true(th_large$plot.title$size > th_default$plot.title$size ||
-              is.null(th_large$plot.title$size))
-  # At minimum, the underlying theme_void uses the base_size
-  # which affects element_text defaults
+  th <- theme_sunburst(base_size = 14)
+  # The 'text' element inherits base_size from theme_void()
+  expect_equal(th$text$size, 14)
+})
+
+# --- base_family passes through ---
+
+test_that("theme_sunburst() passes base_family to theme_void", {
+  th <- theme_sunburst(base_family = "serif")
+  expect_equal(th$text$family, "serif")
+})
+
+# --- Title bottom margin ---
+
+test_that("theme_sunburst() sets title bottom margin", {
+  th <- theme_sunburst()
+  expect_equal(as.numeric(th$plot.title$margin[3]), 10)
 })
