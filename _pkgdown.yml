@@ -8,13 +8,22 @@ reference:
     desc: "Parse hierarchical data and compute coordinates"
     contents:
       - sunburst_data
+      - drilldown
 
   - title: "Plot functions"
-    desc: "Create sunburst and icicle plots"
+    desc: "Create sunburst, icicle, donut, and tree plots"
     contents:
       - sunburst
       - icicle
+      - donut
+      - ggtree
+
+  - title: "Annotation layers"
+    desc: "Add annotations to existing plots"
+    contents:
       - highlight_nodes
+      - bars
+      - tile
 
   - title: "Utilities"
     desc: "Tree inspection"

@@ -1,14 +1,40 @@
+# ggsunburstR 0.3.0
+
+## New plot types
+
+* `donut()` creates ring charts -- sunbursts restricted to the outermost
+  1--N depth levels with configurable centre hole size.
+* `ggtree()` creates classical dendrograms using `geom_segment()`. Supports
+  horizontal layout (`rotate = TRUE`), circular layout (`polar = TRUE`),
+  leaf labels, and scale bars.
+
+## New functions
+
+* `drilldown()` extracts a subtree and recomputes coordinates so the
+  selected node fills the full angular space. Returns a new `sunburst_data`
+  object compatible with all plot functions. Supports chaining.
+* `bars()` adds bar chart annotations adjacent to leaf nodes. Values are
+  max-normalised per variable. Supports multiple variables, labels, and
+  value display.
+* `tile()` adds heatmap-style tile annotations adjacent to leaf nodes.
+  Works with both numeric and categorical variables.
+
+## Testing
+
+* Added 76 new tests (499 total).
+* R CMD check: 0 errors, 0 warnings, 0 notes.
+
 # ggsunburstR 0.2.0
 
 ## New input formats
 
-* Accept `ape::phylo` objects directly — no Newick conversion needed
+* Accept `ape::phylo` objects directly -- no Newick conversion needed
   (`sunburst_data(phylo_obj)`).
-* Path-delimited strings — `sunburst_data(c("A/B/C", "A/B/D"))` with
+* Path-delimited strings -- `sunburst_data(c("A/B/C", "A/B/D"))` with
   configurable separator via `sep`.
-* Path-column data.frames — `sunburst_data(data.frame(path = ...))` with
+* Path-column data.frames -- `sunburst_data(data.frame(path = ...))` with
   extra columns carried as node attributes.
-* `data.tree::Node` objects — R6-based trees with custom scalar fields
+* `data.tree::Node` objects -- R6-based trees with custom scalar fields
   preserved as attributes.
 
 ## New functions
@@ -43,5 +69,5 @@ Initial release.
 * Tree transforms: `ladderize` and `ultrametric` options.
 * S3 class `sunburst_data` with `print()`, `plot()`, `as.data.frame()`,
   and `$data` alias.
-* Standard ggplot2 objects — customise with `+`.
+* Standard ggplot2 objects -- customise with `+`.
 * 342 tests, R CMD check clean.
