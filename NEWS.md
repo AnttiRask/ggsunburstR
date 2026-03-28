@@ -1,3 +1,38 @@
+# ggsunburstR 0.4.0
+
+## Label enhancements
+
+* `sunburst()` gains `label_type = "perpendicular"` for arc-following labels
+  that use pre-computed `pangle`/`pvjust` values and position text at the
+  radial midpoint.
+* `sunburst()` and `icicle()` gain `show_node_labels` for internal node
+  labels, `label_size` for controlling text size, and `min_label_angle` for
+  filtering labels on narrow sectors.
+* `icicle()` gains `label_repel = TRUE` for `ggrepel`-based collision
+  avoidance. Requires the `ggrepel` package (Suggests). Polar repulsion
+  for sunbursts is deferred -- use `min_label_angle` instead.
+
+## New functions
+
+* `sunburst_multifill()` and `icicle_multifill()` create plots with
+  per-depth fill colour scales using `ggnewscale::new_scale_fill()`.
+  Depths not listed in `fills` are rendered with static grey.
+
+## Data improvements
+
+* `sunburst_data()` now includes `ymin`, `ymax`, and `delta_angle` columns
+  in the `$leaf_labels` data.frame, enabling perpendicular label positioning
+  and angular filtering.
+
+## Dependencies
+
+* Added `ggrepel` and `ggnewscale` to Suggests.
+
+## Testing
+
+* Added 69 new tests (569 total).
+* R CMD check: 0 errors, 0 warnings, 0 notes.
+
 # ggsunburstR 0.3.0
 
 ## New plot types

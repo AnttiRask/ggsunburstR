@@ -18,6 +18,12 @@ reference:
       - donut
       - ggtree
 
+  - title: "Multi-scale fill"
+    desc: "Per-depth fill colour scales"
+    contents:
+      - sunburst_multifill
+      - icicle_multifill
+
   - title: "Annotation layers"
     desc: "Add annotations to existing plots"
     contents:

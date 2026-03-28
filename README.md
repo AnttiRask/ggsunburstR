@@ -121,6 +121,37 @@ bars(p, sb, variables = "score")
 tile(p, sb, variables = "group")
 ```
 
+## Label options
+
+Control label appearance in sunburst and icicle plots:
+
+```r
+sb <- sunburst_data("((a, b, c), (d, e));")
+
+# Arc-following (perpendicular) labels
+sunburst(sb, fill = "depth", show_labels = TRUE,
+         label_type = "perpendicular")
+
+# Internal node labels + minimum angle filter
+sunburst(sb, fill = "depth", show_labels = TRUE,
+         show_node_labels = TRUE, min_label_angle = 30)
+
+# ggrepel collision avoidance (icicle only)
+icicle(sb, fill = "depth", show_labels = TRUE, label_repel = TRUE)
+```
+
+## Per-depth fill scales
+
+Use different colour scales for different hierarchy levels:
+
+```r
+sb <- sunburst_data("((a, b)X, (c, d)Y)root;")
+
+# Different fill column per depth (requires ggnewscale)
+sunburst_multifill(sb, fills = list("1" = "name", "2" = "name"))
+icicle_multifill(sb, fills = list("1" = "name", "2" = "name"))
+```
+
 ## Highlight specific nodes
 
 ```r
