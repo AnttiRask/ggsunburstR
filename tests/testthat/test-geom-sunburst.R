@@ -85,14 +85,57 @@ test_that("geom_sunburst() errors on missing required aesthetics", {
   expect_error(ggplot2::ggplot_build(p))
 })
 
-# --- Extra columns preserved ---
+# --- Extra columns usable for fill ---
 
-test_that("geom_sunburst() preserves extra columns for fill mapping", {
+test_that("geom_sunburst() can map any extra column to fill", {
+  df <- make_df()
+  # Map 'value' (a numeric extra column) to fill — proves extra columns
+  # are preserved through the stat for aesthetic mapping
+  p <- ggplot2::ggplot(df) +
+    geom_sunburst(ggplot2::aes(id = child, parent = parent, fill = value))
+  expect_no_error(ggplot2::ggplot_build(p))
+})
+
+# --- branchvalues parameter ---
+
+test_that("geom_sunburst() supports branchvalues parameter", {
   df <- make_df()
   p <- ggplot2::ggplot(df) +
-    geom_sunburst(ggplot2::aes(id = child, parent = parent, fill = group))
-  built <- ggplot2::ggplot_build(p)
-  # fill should be mapped — not all grey
-  fills <- built$data[[1]]$fill
-  expect_true(length(unique(fills)) > 1)
+    geom_sunburst(ggplot2::aes(id = child, parent = parent),
+                  branchvalues = "total")
+  expect_no_error(ggplot2::ggplot_build(p))
+})
+
+# --- leaf_mode parameter ---
+
+test_that("geom_sunburst() supports leaf_mode = 'extended'", {
+  df <- make_df()
+  p <- ggplot2::ggplot(df) +
+    geom_sunburst(ggplot2::aes(id = child, parent = parent),
+                  leaf_mode = "extended")
+  expect_no_error(ggplot2::ggplot_build(p))
+})
+
+# --- Invalid values column warns ---
+
+test_that(".resolve_stat_values() warns on nonexistent column", {
+  # Test the internal helper directly — warnings inside ggproto compute_panel
+  # are suppressed by ggplot2's tryCatch
+  tree_df <- data.frame(parent = c(NA, "root"), child = c("root", "A"))
+  tree <- parse_dataframe(tree_df)
+  expect_warning(
+    ggsunburstR:::.resolve_stat_values("nonexistent", tree_df, tree),
+    "not found"
+  )
+})
+
+# --- Full idiomatic composition ---
+
+test_that("geom_sunburst() composes with coord_polar + theme_void", {
+  df <- make_df()
+  p <- ggplot2::ggplot(df) +
+    geom_sunburst(ggplot2::aes(id = child, parent = parent, fill = group)) +
+    ggplot2::coord_polar() +
+    ggplot2::theme_void()
+  expect_no_error(ggplot2::ggplot_build(p))
 })

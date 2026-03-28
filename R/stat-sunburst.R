@@ -15,8 +15,12 @@ StatSunburst <- ggplot2::ggproto("StatSunburst", ggplot2::Stat,
   # Declare stat-specific params so layer() doesn't warn about them
   extra_params = c("na.rm", "values", "branchvalues", "leaf_mode"),
 
+
   # Replace NA parent with sentinel before remove_missing runs.
   # The root row has parent = NA which triggers ggplot2 warnings.
+  # Note: "__ROOT__" is a reserved sentinel — user data must not
+
+  # contain a node with this exact name.
   setup_data = function(data, params) {
     data$parent[is.na(data$parent)] <- "__ROOT__"
     data
@@ -57,7 +61,13 @@ StatSunburst <- ggplot2::ggproto("StatSunburst", ggplot2::Stat,
   if (is.null(values)) return(NULL)
 
   if (is.character(values) && length(values) == 1) {
-    if (!values %in% names(tree_df)) return(NULL)
+    if (!values %in% names(tree_df)) {
+      rlang::warn(
+        paste0("Column '", values, "' not found in data. Using equal weights."),
+        class = "ggsunburstR_values_not_found"
+      )
+      return(NULL)
+    }
     vals <- setNames(
       as.numeric(tree_df[[values]]),
       as.character(tree_df$child)

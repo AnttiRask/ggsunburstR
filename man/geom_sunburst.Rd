@@ -22,8 +22,9 @@ geom_sunburst(
 }
 \arguments{
 \item{mapping}{Set of aesthetic mappings. \strong{Required:} \code{aes(id, parent)}.
-The \code{id} column identifies each node and \code{parent} gives its parent
-node (use \code{NA} for the root). Optional: \code{fill}, \code{colour}, \code{alpha}.}
+Map any node-identifier column to \code{id} (e.g., \code{aes(id = child)})
+and the parent column to \code{parent}. The root row should have
+\code{parent = NA}. Optional: \code{fill}, \code{colour}, \code{alpha}.}
 
 \item{data}{A data.frame with at least \code{id} (or \code{child}/\code{node}) and
 \code{parent} columns. Extra columns are available for aesthetic mapping.}

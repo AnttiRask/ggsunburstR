@@ -8,8 +8,9 @@
 #' icicle layout. Fill mapping works via standard ggplot2 aesthetics.
 #'
 #' @param mapping Set of aesthetic mappings. **Required:** `aes(id, parent)`.
-#'   The `id` column identifies each node and `parent` gives its parent
-#'   node (use `NA` for the root). Optional: `fill`, `colour`, `alpha`.
+#'   Map any node-identifier column to `id` (e.g., `aes(id = child)`)
+#'   and the parent column to `parent`. The root row should have
+#'   `parent = NA`. Optional: `fill`, `colour`, `alpha`.
 #' @param data A data.frame with at least `id` (or `child`/`node`) and
 #'   `parent` columns. Extra columns are available for aesthetic mapping.
 #' @param stat The statistical transformation. Default `"sunburst"`.
