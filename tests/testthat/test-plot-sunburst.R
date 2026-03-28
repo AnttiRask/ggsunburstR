@@ -81,6 +81,127 @@ test_that("sunburst() applies theme_void", {
               length(p$theme) > 0)
 })
 
+# --- label_type = "perpendicular" ---
+
+test_that("sunburst() with label_type = 'perpendicular' adds a geom_text layer", {
+  sb <- make_sb()
+  p <- sunburst(sb, show_labels = TRUE, label_type = "perpendicular")
+  # Should have at least one more layer than the base (geom_rect)
+  built <- ggplot2::ggplot_build(p)
+  expect_true(length(p$layers) >= 2)
+})
+test_that("sunburst() perpendicular labels use pangle for angle", {
+  sb <- make_sb()
+  p <- sunburst(sb, show_labels = TRUE, label_type = "perpendicular")
+  built <- ggplot2::ggplot_build(p)
+  # Label layer is the second layer (first = geom_rect)
+  label_data <- built$data[[2]]
+  # pangle values should differ from radial angle values
+  p_radial <- sunburst(sb, show_labels = TRUE, label_type = "radial")
+  built_r <- ggplot2::ggplot_build(p_radial)
+  radial_angles <- built_r$data[[2]]$angle
+  perp_angles <- label_data$angle
+  # They must not all be the same
+
+  expect_false(all(radial_angles == perp_angles))
+})
+
+test_that("sunburst() perpendicular labels positioned at radial midpoint", {
+  sb <- make_sb()
+  p <- sunburst(sb, show_labels = TRUE, label_type = "perpendicular")
+  built <- ggplot2::ggplot_build(p)
+  label_data <- built$data[[2]]
+  # The y values should be midpoints (ymin + ymax) / 2, not ymax
+  # Compare against radial y values which use ymax
+  p_radial <- sunburst(sb, show_labels = TRUE, label_type = "radial")
+  built_r <- ggplot2::ggplot_build(p_radial)
+  radial_y <- built_r$data[[2]]$y
+  perp_y <- label_data$y
+  # Perpendicular y should be smaller (midpoint < outer edge)
+  expect_true(all(perp_y < radial_y))
+})
+
+# --- show_node_labels ---
+
+test_that("sunburst() with show_node_labels = TRUE adds node label layer", {
+  sb <- make_sb()
+  p_leaf <- sunburst(sb, show_labels = TRUE)
+  p_both <- sunburst(sb, show_labels = TRUE, show_node_labels = TRUE)
+  expect_equal(length(p_both$layers), length(p_leaf$layers) + 1)
+})
+
+test_that("sunburst() show_node_labels without show_labels has no effect", {
+  sb <- make_sb()
+  p_no <- sunburst(sb)
+  p_nodes <- sunburst(sb, show_node_labels = TRUE)
+  # show_node_labels alone should not add layers (need show_labels = TRUE)
+  expect_equal(length(p_nodes$layers), length(p_no$layers))
+})
+
+# --- label_size ---
+
+test_that("sunburst() label_size controls text size", {
+  sb <- make_sb()
+  p <- sunburst(sb, show_labels = TRUE, label_size = 5)
+  built <- ggplot2::ggplot_build(p)
+  label_data <- built$data[[2]]
+  expect_true(all(label_data$size == 5))
+})
+
+test_that("sunburst() label_size applies to both leaf and node labels", {
+  sb <- make_sb()
+  p <- sunburst(sb, show_labels = TRUE, show_node_labels = TRUE, label_size = 4)
+  built <- ggplot2::ggplot_build(p)
+  # Leaf layer (2nd) and node layer (3rd) both use size = 4
+  expect_true(all(built$data[[2]]$size == 4))
+  expect_true(all(built$data[[3]]$size == 4))
+})
+
+# --- min_label_angle ---
+
+test_that("sunburst() min_label_angle = 0 shows all labels", {
+  sb <- make_sb()
+  p <- sunburst(sb, show_labels = TRUE, min_label_angle = 0)
+  built <- ggplot2::ggplot_build(p)
+  # All 5 leaves should have labels
+  expect_equal(nrow(built$data[[2]]), 5)
+})
+
+test_that("sunburst() min_label_angle filters narrow sectors", {
+  sb <- make_sb()
+  # With 5 equal-weight leaves in 360°, each has delta_angle = 72°
+  # Setting min to 100 should remove all labels — no label layer added
+  p_all <- sunburst(sb, show_labels = TRUE, min_label_angle = 0)
+  p_filtered <- sunburst(sb, show_labels = TRUE, min_label_angle = 100)
+  # Filtered plot should have fewer layers (no label layer)
+  expect_true(length(p_filtered$layers) < length(p_all$layers))
+})
+
+test_that("sunburst() min_label_angle filters node labels too", {
+  sb <- make_sb()
+  # With tree "((a, b, c), (d, e));":
+  # Internal node with 3 leaves: delta_angle = 3/5 * 360 = 216
+  # Internal node with 2 leaves: delta_angle = 2/5 * 360 = 144
+  # min_label_angle = 200 filters all leaf labels (72°) and keeps only
+  # the 3-leaf node label (216°). Node layer is the last data layer.
+  p <- sunburst(sb, show_labels = TRUE, show_node_labels = TRUE,
+                min_label_angle = 200)
+  built <- ggplot2::ggplot_build(p)
+  # Last layer is the node labels (leaf layer was omitted due to filtering)
+  node_layer <- built$data[[length(built$data)]]
+  expect_equal(nrow(node_layer), 1)
+})
+
+# --- Input validation ---
+
+test_that("sunburst() errors on negative min_label_angle", {
+  sb <- make_sb()
+  expect_error(
+    sunburst(sb, min_label_angle = -5),
+    "non-negative"
+  )
+})
+
 # --- leaf_labels output includes geometry columns ---
 
 test_that("sunburst_data leaf_labels includes ymin, ymax, delta_angle", {

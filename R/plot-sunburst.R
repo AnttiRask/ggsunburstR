@@ -10,8 +10,14 @@
 #' @param linewidth Border line width. Default `0.2`.
 #' @param show_labels Whether to add text labels for leaf nodes.
 #'   Default `FALSE`.
+#' @param show_node_labels Whether to add text labels for internal nodes.
+#'   Only takes effect when `show_labels = TRUE`. Default `FALSE`.
 #' @param label_type Label orientation. `"radial"`: text reads outward.
-#'   `"perpendicular"`: text follows arc (post-MVP quality).
+#'   `"perpendicular"`: text follows the arc.
+#' @param label_size Text size for labels. Default `3`.
+#' @param min_label_angle Minimum angular extent (degrees) for a node to
+#'   receive a label. Nodes with `delta_angle < min_label_angle` are not
+#'   labelled. Default `0` (no filtering).
 #' @param ... Passed to `geom_rect()`.
 #'
 #' @return A `ggplot` object with `coord_polar()` and `theme_void()`.
@@ -20,17 +26,23 @@
 #' sb <- sunburst_data("((a, b, c), (d, e));")
 #' sunburst(sb)
 #' sunburst(sb, fill = "depth")
+#' sunburst(sb, show_labels = TRUE, label_type = "perpendicular")
 #'
 #' @export
 sunburst <- function(sb, fill = NULL, colour = "white", linewidth = 0.2,
-                     show_labels = FALSE,
-                     label_type = c("radial", "perpendicular"), ...) {
+                     show_labels = FALSE, show_node_labels = FALSE,
+                     label_type = c("radial", "perpendicular"),
+                     label_size = 3, min_label_angle = 0, ...) {
   # Input validation
   if (!inherits(sb, "sunburst_data")) {
     abort("'sb' must be a sunburst_data object. Use sunburst_data() to create one.")
   }
 
   label_type <- match.arg(label_type)
+
+  if (!is.numeric(min_label_angle) || min_label_angle < 0) {
+    abort("'min_label_angle' must be a non-negative number.")
+  }
 
   # Validate fill column
   if (!is.null(fill) && !fill %in% names(sb$rects)) {
@@ -61,19 +73,83 @@ sunburst <- function(sb, fill = NULL, colour = "white", linewidth = 0.2,
       )
   }
 
-  # Add labels if requested
+  # Add leaf labels if requested
   if (show_labels && nrow(sb$leaf_labels) > 0) {
-    p <- p +
-      ggplot2::geom_text(
-        data = sb$leaf_labels,
-        ggplot2::aes(
-          x = .data[["x"]], y = .data[["y"]],
-          label = .data[["label"]],
-          angle = .data[["angle"]],
-          hjust = .data[["hjust"]]
-        ),
-        size = 3, vjust = 0.5
-      )
+    leaf_data <- sb$leaf_labels
+    # Filter by min_label_angle
+    if (min_label_angle > 0 && "delta_angle" %in% names(leaf_data)) {
+      leaf_data <- leaf_data[leaf_data$delta_angle >= min_label_angle, ]
+    }
+
+    if (nrow(leaf_data) > 0) {
+      if (label_type == "perpendicular") {
+        # Perpendicular: arc-following labels at radial midpoint
+        p <- p +
+          ggplot2::geom_text(
+            data = leaf_data,
+            ggplot2::aes(
+              x = .data[["x"]],
+              y = (.data[["ymin"]] + .data[["ymax"]]) / 2,
+              label = .data[["label"]],
+              angle = .data[["pangle"]],
+              vjust = .data[["pvjust"]]
+            ),
+            size = label_size, hjust = 0.5
+          )
+      } else {
+        # Radial: text reads outward from centre
+        p <- p +
+          ggplot2::geom_text(
+            data = leaf_data,
+            ggplot2::aes(
+              x = .data[["x"]], y = .data[["y"]],
+              label = .data[["label"]],
+              angle = .data[["angle"]],
+              hjust = .data[["hjust"]]
+            ),
+            size = label_size, vjust = 0.5
+          )
+      }
+    }
+  }
+
+  # Add internal node labels if requested
+  if (show_labels && show_node_labels && nrow(sb$node_labels) > 0) {
+    node_data <- sb$node_labels
+    # Filter by min_label_angle
+    if (min_label_angle > 0 && "delta_angle" %in% names(node_data)) {
+      node_data <- node_data[node_data$delta_angle >= min_label_angle, ]
+    }
+
+    if (nrow(node_data) > 0) {
+      if (label_type == "perpendicular") {
+        p <- p +
+          ggplot2::geom_text(
+            data = node_data,
+            ggplot2::aes(
+              x = .data[["x"]],
+              y = .data[["y"]],
+              label = .data[["label"]],
+              angle = .data[["pangle"]],
+              vjust = .data[["pvjust"]]
+            ),
+            size = label_size, hjust = 0.5
+          )
+      } else {
+        p <- p +
+          ggplot2::geom_text(
+            data = node_data,
+            ggplot2::aes(
+              x = .data[["x"]],
+              y = .data[["y"]],
+              label = .data[["label"]],
+              angle = .data[["rangle"]],
+              hjust = .data[["rhjust"]]
+            ),
+            size = label_size, vjust = 0.5
+          )
+      }
+    }
   }
 
   # Apply coord_polar and theme_void
