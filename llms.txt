@@ -1,4 +1,4 @@
-# ggsunburstR [![ggsunburstR hex sticker](reference/figures/ggsunburstR_hex.png)](https://anttirask.github.io/ggsunburstR/)
+# ggsunburstR
 
 Create sunburst and icicle adjacency diagrams using ggplot2. Accepts
 hierarchical data in multiple formats (Newick strings/files, data
