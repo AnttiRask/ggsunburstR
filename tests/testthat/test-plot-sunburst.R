@@ -169,12 +169,11 @@ test_that("sunburst() min_label_angle = 0 shows all labels", {
 
 test_that("sunburst() min_label_angle filters narrow sectors", {
   sb <- make_sb()
-  # With 5 equal-weight leaves in 360°, each has delta_angle = 72°
-  # Setting min to 100 should remove all labels — no label layer added
-  p_all <- sunburst(sb, show_labels = TRUE, min_label_angle = 0)
+  # 5 equal-weight leaves → 72° each. min = 100 filters all.
   p_filtered <- sunburst(sb, show_labels = TRUE, min_label_angle = 100)
-  # Filtered plot should have fewer layers (no label layer)
-  expect_true(length(p_filtered$layers) < length(p_all$layers))
+  built <- ggplot2::ggplot_build(p_filtered)
+  # Only 1 data layer (geom_rect) — no label layer added
+  expect_equal(length(built$data), 1)
 })
 
 test_that("sunburst() min_label_angle filters node labels too", {
@@ -200,6 +199,11 @@ test_that("sunburst() errors on negative min_label_angle", {
     sunburst(sb, min_label_angle = -5),
     "non-negative"
   )
+})
+
+test_that("sunburst() errors on invalid label_type", {
+  sb <- make_sb()
+  expect_error(sunburst(sb, label_type = "invalid"))
 })
 
 # --- leaf_labels output includes geometry columns ---

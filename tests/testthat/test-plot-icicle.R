@@ -94,11 +94,31 @@ test_that("icicle() label_size controls text size", {
 
 # --- min_label_angle ---
 
+test_that("icicle() label_size applies to both leaf and node labels", {
+  sb <- make_sb()
+  p <- icicle(sb, show_labels = TRUE, show_node_labels = TRUE, label_size = 4)
+  built <- ggplot2::ggplot_build(p)
+  expect_true(all(built$data[[2]]$size == 4))
+  expect_true(all(built$data[[3]]$size == 4))
+})
+
 test_that("icicle() min_label_angle filters narrow sectors", {
   sb <- make_sb()
-  p_all <- icicle(sb, show_labels = TRUE, min_label_angle = 0)
+  # 5 equal-weight leaves → 72° each. min = 100 filters all.
   p_filtered <- icicle(sb, show_labels = TRUE, min_label_angle = 100)
-  expect_true(length(p_filtered$layers) < length(p_all$layers))
+  built <- ggplot2::ggplot_build(p_filtered)
+  # Only 1 data layer (geom_rect) — no label layer added
+  expect_equal(length(built$data), 1)
+})
+
+test_that("icicle() min_label_angle filters node labels too", {
+  sb <- make_sb()
+  # 3-leaf node: 216°, 2-leaf node: 144°. min = 200 keeps only the 3-leaf.
+  p <- icicle(sb, show_labels = TRUE, show_node_labels = TRUE,
+              min_label_angle = 200)
+  built <- ggplot2::ggplot_build(p)
+  node_layer <- built$data[[length(built$data)]]
+  expect_equal(nrow(node_layer), 1)
 })
 
 # --- Input validation ---
