@@ -64,6 +64,23 @@ test_that("icicle_multifill() returns a ggplot without coord_polar", {
   expect_false(inherits(p$coordinates, "CoordPolar"))
 })
 
+test_that("icicle_multifill() uses scale_y_reverse", {
+  skip_if_not_installed("ggnewscale")
+  sb <- make_sb()
+  p <- icicle_multifill(sb, fills = list("1" = "name"))
+  built <- ggplot2::ggplot_build(p)
+  expect_true(built$layout$panel_scales_y[[1]]$trans$name == "reverse")
+})
+
+test_that("icicle_multifill() renders unspecified depths with grey", {
+  skip_if_not_installed("ggnewscale")
+  sb <- make_sb()
+  p <- icicle_multifill(sb, fills = list("2" = "name"))
+  built <- ggplot2::ggplot_build(p)
+  # First layer (depth 1, grey) should have uniform fill
+  expect_equal(length(unique(built$data[[1]]$fill)), 1)
+})
+
 test_that("icicle_multifill() creates fill-mapped layers", {
   skip_if_not_installed("ggnewscale")
   sb <- make_sb()
@@ -101,4 +118,22 @@ test_that("sunburst_multifill() errors for nonexistent fill column", {
   sb <- make_sb()
   expect_error(sunburst_multifill(sb, fills = list("1" = "nonexistent")),
                "not found")
+})
+
+test_that("icicle_multifill() validates inputs", {
+  skip_if_not_installed("ggnewscale")
+  expect_error(icicle_multifill(42, fills = list("1" = "name")),
+               "sunburst_data")
+})
+
+# --- colour and linewidth pass-through ---
+
+test_that("sunburst_multifill() passes colour and linewidth to layers", {
+  skip_if_not_installed("ggnewscale")
+  sb <- make_sb()
+  p <- sunburst_multifill(sb, fills = list("2" = "name"),
+                          colour = "red", linewidth = 0.5)
+  built <- ggplot2::ggplot_build(p)
+  expect_true(all(built$data[[1]]$colour == "red"))
+  expect_true(all(built$data[[1]]$linewidth == 0.5))
 })
