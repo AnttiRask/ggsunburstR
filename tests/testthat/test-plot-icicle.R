@@ -128,6 +128,43 @@ test_that("icicle() errors on negative min_label_angle", {
   expect_error(icicle(sb, min_label_angle = -5), "non-negative")
 })
 
+# --- label_repel ---
+
+test_that("icicle() label_repel = FALSE (default) uses geom_text", {
+  sb <- make_sb()
+  p <- icicle(sb, show_labels = TRUE)
+  # Second layer should be GeomText, not GeomTextRepel
+  expect_s3_class(p$layers[[2]]$geom, "GeomText")
+})
+
+test_that("icicle() label_repel = TRUE uses geom_text_repel", {
+  skip_if_not_installed("ggrepel")
+  sb <- make_sb()
+  p <- icicle(sb, show_labels = TRUE, label_repel = TRUE)
+  expect_true(inherits(p$layers[[2]]$geom, "GeomTextRepel"))
+})
+
+test_that("icicle() label_repel with show_node_labels uses repel for both layers", {
+  skip_if_not_installed("ggrepel")
+  sb <- make_sb()
+  p <- icicle(sb, show_labels = TRUE, show_node_labels = TRUE,
+              label_repel = TRUE)
+  # Leaf layer (2nd) and node layer (3rd) both use GeomTextRepel
+  expect_true(inherits(p$layers[[2]]$geom, "GeomTextRepel"))
+  expect_true(inherits(p$layers[[3]]$geom, "GeomTextRepel"))
+})
+
+test_that("icicle() label_repel combined with min_label_angle", {
+  skip_if_not_installed("ggrepel")
+  sb <- make_sb()
+  # 5 equal leaves → 72° each. min = 50 keeps all, repel applied.
+  p <- icicle(sb, show_labels = TRUE, label_repel = TRUE,
+              min_label_angle = 50)
+  built <- ggplot2::ggplot_build(p)
+  expect_equal(nrow(built$data[[2]]), 5)
+  expect_true(inherits(p$layers[[2]]$geom, "GeomTextRepel"))
+})
+
 # --- Customisable with + ---
 
 test_that("icicle() result is customisable with +", {

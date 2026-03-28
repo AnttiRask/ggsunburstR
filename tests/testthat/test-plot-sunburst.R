@@ -206,6 +206,22 @@ test_that("sunburst() errors on invalid label_type", {
   expect_error(sunburst(sb, label_type = "invalid"))
 })
 
+# --- label_repel ---
+
+test_that("sunburst() label_repel = TRUE errors with informative message", {
+  sb <- make_sb()
+  expect_error(
+    sunburst(sb, show_labels = TRUE, label_repel = TRUE),
+    "polar"
+  )
+})
+
+test_that("sunburst() label_repel = FALSE (default) works normally", {
+  sb <- make_sb()
+  p <- sunburst(sb, show_labels = TRUE, label_repel = FALSE)
+  expect_s3_class(p, "ggplot")
+})
+
 # --- leaf_labels output includes geometry columns ---
 
 test_that("sunburst_data leaf_labels includes ymin, ymax, delta_angle", {
