@@ -36,6 +36,40 @@ vjust_rtext <- function(angle) {
   0.5
 }
 
+# Build a geom_rect layer with fill dispatch.
+# fill = NULL or "none" → static grey, "auto" → depth, string → mapped.
+.build_rect_layer <- function(data, fill, colour, linewidth, ...) {
+  if (is.null(fill) || identical(fill, "none")) {
+    ggplot2::geom_rect(
+      data = data,
+      ggplot2::aes(
+        xmin = .data[["xmin"]], xmax = .data[["xmax"]],
+        ymin = .data[["ymin"]], ymax = .data[["ymax"]]
+      ),
+      fill = "grey80", colour = colour, linewidth = linewidth, ...
+    )
+  } else {
+    fill_col <- if (identical(fill, "auto")) "depth" else fill
+    ggplot2::geom_rect(
+      data = data,
+      ggplot2::aes(
+        xmin = .data[["xmin"]], xmax = .data[["xmax"]],
+        ymin = .data[["ymin"]], ymax = .data[["ymax"]],
+        fill = .data[[fill_col]]
+      ),
+      colour = colour, linewidth = linewidth, ...
+    )
+  }
+}
+
+# Validate fill parameter — skip "auto" and "none" as reserved values.
+.validate_fill <- function(fill, rects) {
+  if (is.null(fill) || fill %in% c("auto", "none")) return(invisible())
+  if (!fill %in% names(rects)) {
+    rlang::abort(paste0("Column '", fill, "' not found in sunburst data."))
+  }
+}
+
 # Add a text label layer — plain geom_text or ggrepel::geom_text_repel.
 # Used by icicle() to avoid duplicating geom-selection logic.
 .add_text_layer <- function(data, label_size, label_repel = FALSE) {

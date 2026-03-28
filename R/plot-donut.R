@@ -7,7 +7,8 @@
 #' @param sb A `sunburst_data` object from `sunburst_data()`.
 #' @param levels Number of depth levels to display (from the outermost
 #'   inward). `1` = single ring, `2` = two concentric rings.
-#' @param fill Column name to map to fill aesthetic. `NULL` for static grey.
+#' @param fill Fill mapping. `NULL` or `"none"` for static grey, `"auto"`
+#'   for depth mapping, or a column name in `sb$rects`.
 #' @param colour Border colour for segments. Default `"white"`.
 #' @param linewidth Border line width. Default `0.2`.
 #' @param show_labels Whether to display labels. Default `FALSE`.
@@ -33,9 +34,7 @@ donut <- function(sb, levels = 1, fill = NULL, colour = "white",
     abort("'sb' must be a sunburst_data object. Use sunburst_data() to create one.")
   }
 
-  if (!is.null(fill) && !fill %in% names(sb$rects)) {
-    abort("Column '{fill}' not found in sunburst data.")
-  }
+  .validate_fill(fill, sb$rects)
 
   # Single-node tree: no displayable nodes (root is excluded from rects)
   if (nrow(sb$rects) == 0) {
@@ -54,26 +53,8 @@ donut <- function(sb, levels = 1, fill = NULL, colour = "white",
   donut_rects$ymax <- donut_rects$ymax + y_shift
 
   # Build plot
-  if (is.null(fill)) {
-    p <- ggplot2::ggplot(donut_rects) +
-      ggplot2::geom_rect(
-        ggplot2::aes(
-          xmin = .data[["xmin"]], xmax = .data[["xmax"]],
-          ymin = .data[["ymin"]], ymax = .data[["ymax"]]
-        ),
-        fill = "grey80", colour = colour, linewidth = linewidth, ...
-      )
-  } else {
-    p <- ggplot2::ggplot(donut_rects) +
-      ggplot2::geom_rect(
-        ggplot2::aes(
-          xmin = .data[["xmin"]], xmax = .data[["xmax"]],
-          ymin = .data[["ymin"]], ymax = .data[["ymax"]],
-          fill = .data[[fill]]
-        ),
-        colour = colour, linewidth = linewidth, ...
-      )
-  }
+  p <- ggplot2::ggplot(donut_rects) +
+    .build_rect_layer(donut_rects, fill, colour, linewidth, ...)
 
   # Labels -- filter to nodes in the donut, adjust y positions
   if (show_labels) {

@@ -4,8 +4,11 @@
 #' `ggplot2::geom_rect()` with `coord_polar()` and `theme_void()`.
 #'
 #' @param sb A `sunburst_data` object from `sunburst_data()`.
-#' @param fill Column name in `sb$rects` to map to fill aesthetic. When
-#'   `NULL`, a static grey fill is used.
+#' @param fill Fill mapping. One of:
+#'   - `NULL` (default): static grey fill (no aesthetic mapping).
+#'   - `"auto"`: maps fill to the `depth` column.
+#'   - `"none"`: explicit static grey fill (same as `NULL`).
+#'   - A column name in `sb$rects` (e.g., `"name"`, `"depth"`).
 #' @param colour Border colour for rectangles. Default `"white"`.
 #' @param linewidth Border line width. Default `0.2`.
 #' @param show_labels Whether to add text labels for leaf nodes.
@@ -58,34 +61,11 @@ sunburst <- function(sb, fill = NULL, colour = "white", linewidth = 0.2,
     ))
   }
 
-  # Validate fill column
-  if (!is.null(fill) && !fill %in% names(sb$rects)) {
-    abort("Column '{fill}' not found in sunburst data.")
-  }
+  .validate_fill(fill, sb$rects)
 
   # Build the base plot
-  if (is.null(fill)) {
-    # Static fill — no aesthetic mapping
-    p <- ggplot2::ggplot(sb$rects) +
-      ggplot2::geom_rect(
-        ggplot2::aes(
-          xmin = .data[["xmin"]], xmax = .data[["xmax"]],
-          ymin = .data[["ymin"]], ymax = .data[["ymax"]]
-        ),
-        fill = "grey80", colour = colour, linewidth = linewidth, ...
-      )
-  } else {
-    # Mapped fill
-    p <- ggplot2::ggplot(sb$rects) +
-      ggplot2::geom_rect(
-        ggplot2::aes(
-          xmin = .data[["xmin"]], xmax = .data[["xmax"]],
-          ymin = .data[["ymin"]], ymax = .data[["ymax"]],
-          fill = .data[[fill]]
-        ),
-        colour = colour, linewidth = linewidth, ...
-      )
-  }
+  p <- ggplot2::ggplot(sb$rects) +
+    .build_rect_layer(sb$rects, fill, colour, linewidth, ...)
 
   # Add leaf labels if requested
   if (show_labels && nrow(sb$leaf_labels) > 0) {
