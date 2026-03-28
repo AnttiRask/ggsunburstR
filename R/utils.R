@@ -35,3 +35,13 @@ hjust_ptext <- function(angle) {
 vjust_rtext <- function(angle) {
   0.5
 }
+
+# Filter label data by minimum angular extent.
+# Removes rows where delta_angle < min_angle. Returns filtered data.frame.
+.filter_by_angle <- function(data, min_angle) {
+  if (min_angle > 0 && "delta_angle" %in% names(data)) {
+    data[data$delta_angle >= min_angle, ]
+  } else {
+    data
+  }
+}

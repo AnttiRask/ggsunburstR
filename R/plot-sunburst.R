@@ -75,11 +75,7 @@ sunburst <- function(sb, fill = NULL, colour = "white", linewidth = 0.2,
 
   # Add leaf labels if requested
   if (show_labels && nrow(sb$leaf_labels) > 0) {
-    leaf_data <- sb$leaf_labels
-    # Filter by min_label_angle
-    if (min_label_angle > 0 && "delta_angle" %in% names(leaf_data)) {
-      leaf_data <- leaf_data[leaf_data$delta_angle >= min_label_angle, ]
-    }
+    leaf_data <- .filter_by_angle(sb$leaf_labels, min_label_angle)
 
     if (nrow(leaf_data) > 0) {
       if (label_type == "perpendicular") {
@@ -115,11 +111,7 @@ sunburst <- function(sb, fill = NULL, colour = "white", linewidth = 0.2,
 
   # Add internal node labels if requested
   if (show_labels && show_node_labels && nrow(sb$node_labels) > 0) {
-    node_data <- sb$node_labels
-    # Filter by min_label_angle
-    if (min_label_angle > 0 && "delta_angle" %in% names(node_data)) {
-      node_data <- node_data[node_data$delta_angle >= min_label_angle, ]
-    }
+    node_data <- .filter_by_angle(sb$node_labels, min_label_angle)
 
     if (nrow(node_data) > 0) {
       if (label_type == "perpendicular") {

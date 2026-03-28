@@ -14,8 +14,8 @@
 #'   Only takes effect when `show_labels = TRUE`. Default `FALSE`.
 #' @param label_size Text size for labels. Default `3`.
 #' @param min_label_angle Minimum angular extent (degrees) for a node to
-#'   receive a label. Uses the same `delta_angle` column as sunburst
-#'   filtering. Default `0` (no filtering).
+#'   receive a label. Nodes with `delta_angle < min_label_angle` are not
+#'   labelled. Default `0` (no filtering).
 #' @param ... Passed to `geom_rect()`.
 #'
 #' @return A `ggplot` object with `scale_y_reverse()` and `theme_void()`.
@@ -67,11 +67,7 @@ icicle <- function(sb, fill = NULL, colour = "white", linewidth = 0.2,
 
   # Horizontal leaf labels (no rotation) for icicle
   if (show_labels && nrow(sb$leaf_labels) > 0) {
-    leaf_data <- sb$leaf_labels
-    # Filter by min_label_angle
-    if (min_label_angle > 0 && "delta_angle" %in% names(leaf_data)) {
-      leaf_data <- leaf_data[leaf_data$delta_angle >= min_label_angle, ]
-    }
+    leaf_data <- .filter_by_angle(sb$leaf_labels, min_label_angle)
 
     if (nrow(leaf_data) > 0) {
       p <- p +
@@ -88,11 +84,7 @@ icicle <- function(sb, fill = NULL, colour = "white", linewidth = 0.2,
 
   # Internal node labels
   if (show_labels && show_node_labels && nrow(sb$node_labels) > 0) {
-    node_data <- sb$node_labels
-    # Filter by min_label_angle
-    if (min_label_angle > 0 && "delta_angle" %in% names(node_data)) {
-      node_data <- node_data[node_data$delta_angle >= min_label_angle, ]
-    }
+    node_data <- .filter_by_angle(sb$node_labels, min_label_angle)
 
     if (nrow(node_data) > 0) {
       p <- p +
