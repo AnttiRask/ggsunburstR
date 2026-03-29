@@ -17,6 +17,10 @@ compute_coordinates <- function(tree, leaf_mode = "actual") {
   total_size <- sum(vapply(
     leaves, function(l) tree$nodes[[l]]$size, numeric(1)
   ))
+  if (total_size == 0) {
+    abort("Total leaf size is zero -- cannot compute angular allocation.",
+          i = "Check that 'values' are not all zero.")
+  }
   farthest <- get_farthest_node(tree)
   y_offset <- farthest$dist
 
