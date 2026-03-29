@@ -221,3 +221,22 @@ test_that("all-same-depth tree extended mode is a no-op", {
                  result_ext$rects[[i]]$ymax)
   }
 })
+
+# --- Deep tree (20 levels) ---
+
+test_that("deep tree (20 levels) computes correct coordinates", {
+  # Build a 20-level deep tree as Newick: (((((...(leaf)...))));
+  nw <- paste0(paste(rep("(", 19), collapse = ""), "leaf",
+               paste(rep(")", 19), collapse = ""), ";")
+  tree <- parse_newick(nw)
+  tree <- assign_sizes(tree)
+  result <- compute_coordinates(tree)
+  leaf_ids <- which(vapply(result$rects, function(r) {
+    !is.null(r) && r$is_leaf
+  }, logical(1)))
+  expect_equal(length(leaf_ids), 1)
+  # Should have valid coords
+  r <- result$rects[[leaf_ids[1]]]
+  expect_true(r$xmin < r$xmax)
+  expect_true(r$ymin < r$ymax)
+})

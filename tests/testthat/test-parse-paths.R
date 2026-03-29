@@ -107,3 +107,25 @@ test_that("sunburst_data() with paths stores type in params", {
   sb <- sunburst_data(c("A/B", "A/C"))
   expect_equal(attr(sb, "params")$type, "paths")
 })
+
+# --- Empty/malformed paths ---
+
+test_that("parse_paths() handles empty segments gracefully", {
+  tree <- parse_paths(c("A//B", "A/B/"))
+  # Empty segments dropped — same as "A/B"
+  b_id <- find_node_by_name(tree, "B")
+  expect_false(is.null(b_id))
+})
+
+test_that("parse_paths() handles empty string input", {
+  tree <- parse_paths("")
+  # Should produce just the root (no children added)
+  expect_equal(length(tree$children[[1]]), 0)
+})
+
+test_that("parse_paths() duplicate full paths reuse leaf (no extras)", {
+  tree <- parse_paths(c("A/B/C", "A/B/C"))
+  c_id <- find_node_by_name(tree, "C")
+  expect_false(is.null(c_id))
+  expect_equal(tree$n_tips, 1L)  # Only one leaf C
+})

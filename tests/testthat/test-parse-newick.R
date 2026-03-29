@@ -131,3 +131,15 @@ test_that("parse_newick() parses the 10-leaf example tree", {
   tree <- parse_newick("(((a, b, c), (d, e, f, g)), (f, i, h));")
   expect_equal(tree$n_tips, 10L)
 })
+
+# --- Duplicate tip labels ---
+
+test_that("parse_newick() handles duplicate tip labels (first match)", {
+  # The example tree has "f" appearing twice
+  tree <- parse_newick("(((a, b, c), (d, e, f, g)), (f, i, h));")
+  # find_node_by_name returns the first match
+  f_id <- find_node_by_name(tree, "f")
+  expect_false(is.null(f_id))
+  # There should be 10 tips total (including both "f" nodes)
+  expect_equal(tree$n_tips, 10L)
+})

@@ -134,3 +134,12 @@ test_that("bars() validates sb is sunburst_data", {
   expect_error(bars(ggplot2::ggplot(), data.frame(x = 1), "x"),
                class = "rlang_error")
 })
+
+# --- Single-leaf tree ---
+
+test_that("bars() works with single-leaf tree", {
+  df <- data.frame(parent = c(NA, "root"), child = c("root", "A"), val = c(NA, 5))
+  sb <- sunburst_data(df)
+  p <- icicle(sb)
+  expect_no_error(bars(p, sb, variables = "val"))
+})

@@ -294,3 +294,21 @@ test_that("sunburst() result is customisable with +", {
     ggplot2::labs(title = "Test")
   expect_equal(p$labels$title, "Test")
 })
+
+# --- fill = "auto" equivalence ---
+
+test_that("fill = 'auto' is equivalent to fill = 'depth'", {
+  sb <- make_sb()
+  p_auto <- sunburst(sb, fill = "auto")
+  p_depth <- sunburst(sb, fill = "depth")
+  built_auto <- ggplot2::ggplot_build(p_auto)
+  built_depth <- ggplot2::ggplot_build(p_depth)
+  expect_equal(built_auto$data[[1]]$fill, built_depth$data[[1]]$fill)
+})
+
+# --- Invalid fill expression ---
+
+test_that("sunburst() errors on invalid fill expression", {
+  sb <- make_sb()
+  expect_error(sunburst(sb, fill = 1 + 2), class = "rlang_error")
+})

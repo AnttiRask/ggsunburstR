@@ -75,3 +75,19 @@ test_that("sunburst_data() with data.tree stores type in params", {
   sb <- sunburst_data(dt)
   expect_equal(attr(sb, "params")$type, "datatree")
 })
+
+# --- Non-scalar custom fields ---
+
+test_that("data.tree non-scalar fields are silently excluded", {
+  skip_if_not_installed("data.tree")
+  root <- data.tree::Node$new("root_node")
+  a <- root$AddChild("A")
+  a$tags <- c("x", "y", "z")  # vector, not scalar
+  a$colour <- "red"  # scalar, should be kept
+
+  sb <- sunburst_data(root)
+  a_row <- sb$rects[!is.na(sb$rects$name) & sb$rects$name == "A", ]
+  expect_true("colour" %in% names(a_row))
+  # tags should NOT be in the output (non-scalar)
+  expect_false("tags" %in% names(a_row))
+})

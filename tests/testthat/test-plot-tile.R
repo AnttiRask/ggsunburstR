@@ -108,3 +108,12 @@ test_that("tile() works with sunburst plot", {
   p2 <- tile(p, sb, variables = "score")
   expect_no_error(ggplot2::ggplot_build(p2))
 })
+
+# --- Single-leaf tree ---
+
+test_that("tile() works with single-leaf tree", {
+  df <- data.frame(parent = c(NA, "root"), child = c("root", "A"), val = c(NA, 5))
+  sb <- sunburst_data(df)
+  p <- icicle(sb)
+  expect_no_error(tile(p, sb, variables = "val"))
+})

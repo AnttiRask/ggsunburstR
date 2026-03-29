@@ -105,3 +105,11 @@ test_that("assign_sizes() total mode uses children sum regardless", {
   # A = sum(children) = 4, not the supplied 10
   expect_equal(result$nodes[[2]]$size, 4.0)
 })
+
+# --- All-zero values error ---
+
+test_that("all-zero values cause error in compute_coordinates", {
+  tree <- parse_newick("(a, b, c);")
+  tree <- assign_sizes(tree, values = c(a = 0, b = 0, c = 0))
+  expect_error(compute_coordinates(tree), "zero")
+})

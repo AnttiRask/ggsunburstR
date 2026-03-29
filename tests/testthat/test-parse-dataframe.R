@@ -115,3 +115,12 @@ test_that("parse_dataframe() handles duplicate names under different parents", {
   expect_equal(sort(leaf_names), c("leaf", "leaf"))
   expect_equal(tree$n_tips, 2L)
 })
+
+# --- Tibble input ---
+
+test_that("parse_dataframe() works with tibble input", {
+  skip_if_not_installed("tibble")
+  df <- tibble::tibble(parent = c(NA, "root", "root"), child = c("root", "A", "B"))
+  tree <- parse_dataframe(df)
+  expect_equal(tree$n_tips, 2L)
+})

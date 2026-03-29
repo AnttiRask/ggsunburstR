@@ -91,3 +91,13 @@ test_that("plot.sunburst_data() exists as a method", {
   expect_true(is.function(getS3method("plot", "sunburst_data",
                                        optional = TRUE)))
 })
+
+# --- print output content ---
+
+test_that("print.sunburst_data() output contains expected content", {
+  sb <- make_test_sb()
+  out <- capture.output(print(sb), type = "message")
+  out_text <- paste(out, collapse = " ")
+  expect_true(grepl("3 nodes", out_text) || grepl("3 node", out_text))
+  expect_true(grepl("3 lea", out_text))
+})

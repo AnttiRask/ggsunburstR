@@ -54,3 +54,11 @@ test_that("detect_input_type() errors on numeric input", {
 test_that("detect_input_type() errors on unrecognisable string", {
   expect_error(detect_input_type("just a plain string"), class = "rlang_error")
 })
+
+# --- Tibble input ---
+
+test_that("detect_input_type() returns 'dataframe' for tibble input", {
+  skip_if_not_installed("tibble")
+  df <- tibble::tibble(parent = c(NA, "root"), child = c("root", "A"))
+  expect_equal(detect_input_type(df), "dataframe")
+})

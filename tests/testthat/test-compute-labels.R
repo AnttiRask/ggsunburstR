@@ -178,3 +178,24 @@ test_that("rot parameter shifts base angles", {
   angle_rot <- labels_rot$leaf_labels[[leaf_ids[1]]]$angle
   expect_equal(angle_no_rot - angle_rot, 45.0)
 })
+
+# --- Partial sunburst (xlim < 360) ---
+
+test_that("labels scale correctly for xlim < 360 (partial sunburst)", {
+  labels_full <- compute_labels_test("(a, b);", xlim = 360)
+  labels_half <- compute_labels_test("(a, b);", xlim = 180)
+  # delta_angle should be halved for half-sunburst
+  node_ids_full <- which(vapply(labels_full$node_labels, function(l) !is.null(l), logical(1)))
+  node_ids_half <- which(vapply(labels_half$node_labels, function(l) !is.null(l), logical(1)))
+  # No internal node labels for "(a, b);" — check leaf delta_angle instead
+  # Actually "(a, b);" has root -> a, b. Root is excluded. So use leaf labels.
+  leaf_full <- which(vapply(labels_full$leaf_labels, function(l) !is.null(l), logical(1)))
+  leaf_half <- which(vapply(labels_half$leaf_labels, function(l) !is.null(l), logical(1)))
+  # Use a tree with internal nodes for delta_angle
+  labels_full2 <- compute_labels_test("((a, b), c);", xlim = 360)
+  labels_half2 <- compute_labels_test("((a, b), c);", xlim = 180)
+  nf <- which(vapply(labels_full2$node_labels, function(l) !is.null(l), logical(1)))
+  nh <- which(vapply(labels_half2$node_labels, function(l) !is.null(l), logical(1)))
+  expect_equal(labels_half2$node_labels[[nh[1]]]$delta_angle,
+               labels_full2$node_labels[[nf[1]]]$delta_angle / 2)
+})
