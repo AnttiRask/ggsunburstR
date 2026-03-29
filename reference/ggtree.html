@@ -9,7 +9,7 @@ geom_segment() from the segment data in a sunburst_data object."><meta property=
 
     <a class="navbar-brand me-2" href="../index.html">ggsunburstR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -118,6 +118,15 @@ auto-computed as one tenth of the total tree depth.</p></dd>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>A <code>ggplot</code> object.</p>
     </div>
+    <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p>Three layout modes are available:</p><ul><li><p>Horizontal dendrogram (default): <code>rotate = TRUE, polar = FALSE</code>.
+Root at left, leaves at right.</p></li>
+<li><p>Vertical dendrogram: <code>rotate = FALSE, polar = FALSE</code>.
+Root at top, leaves at bottom.</p></li>
+<li><p>Circular (radial) tree: <code>polar = TRUE</code>. Root at centre,
+leaves around circumference with leader lines and rotated labels.</p></li>
+</ul></div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
     <p>The Bioconductor package <code>ggtree</code> also exports a <code>ggtree()</code>

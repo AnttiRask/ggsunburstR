@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ggsunburstR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -32,6 +32,36 @@
       <small>Source: <a href="https://github.com/AnttiRask/ggsunburstR/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.5.1" id="ggsunburstr-051">ggsunburstR 0.5.1<a class="anchor" aria-label="anchor" href="#ggsunburstr-051"></a></h2>
+<div class="section level3">
+<h3 id="error-messages-0-5-1">Error messages<a class="anchor" aria-label="anchor" href="#error-messages-0-5-1"></a></h3>
+<ul><li>All error messages with variable interpolation now use <code><a href="https://cli.r-lib.org/reference/cli_abort.html" class="external-link">cli::cli_abort()</a></code> for proper rendering. Affected functions: <code><a href="../reference/drilldown.html">drilldown()</a></code>, <code><a href="../reference/bars.html">bars()</a></code>, <code><a href="../reference/tile.html">tile()</a></code>, <code><a href="../reference/sunburst_multifill.html">sunburst_multifill()</a></code>, <code><a href="../reference/icicle_multifill.html">icicle_multifill()</a></code>, and internal validators.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="code-quality-0-5-1">Code quality<a class="anchor" aria-label="anchor" href="#code-quality-0-5-1"></a></h3>
+<ul><li>Extracted shared <code>.read_newick_safe()</code> helper – eliminates duplicated Newick parsing logic between <code>parse_newick()</code> and <code><a href="../reference/nw_print.html">nw_print()</a></code>.</li>
+<li>
+<code>compute_coordinates()</code> now guards against all-zero leaf sizes with an informative error instead of silent division by zero.</li>
+<li>
+<code><a href="../reference/drilldown.html">drilldown()</a></code> <code>params$drilldown_from</code> now always stores the node name (previously stored mixed types depending on how node was specified).</li>
+<li>Fixed 1-space indent in <code>drilldown.R</code>.</li>
+<li>Pinned <code>rangle(270)</code> test to exact expected value.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="documentation-0-5-1">Documentation<a class="anchor" aria-label="anchor" href="#documentation-0-5-1"></a></h3>
+<ul><li>Added <code>@seealso</code> cross-references to <code><a href="../reference/sunburst.html">sunburst()</a></code>, <code><a href="../reference/icicle.html">icicle()</a></code>.</li>
+<li>Added <code>@details</code> to <code><a href="../reference/ggtree.html">ggtree()</a></code> documenting three layout modes.</li>
+<li>Added bare name fill example to <code><a href="../reference/sunburst.html">sunburst()</a></code> roxygen2 examples.</li>
+<li>Added <code>label_repel</code> example to <code><a href="../reference/icicle.html">icicle()</a></code> roxygen2 examples.</li>
+<li>Added deprecation plan note for <code>fill = NULL</code> in <code><a href="../reference/sunburst.html">sunburst()</a></code> and <code><a href="../reference/icicle.html">icicle()</a></code> docs.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="testing-0-5-1">Testing<a class="anchor" aria-label="anchor" href="#testing-0-5-1"></a></h3>
+<ul><li>Added 21 edge-case tests: single-leaf bars/tile, empty/malformed paths, duplicate paths, non-scalar data.tree fields, deep tree (20 levels), xlim &lt; 360 labels, tibble input, duplicate tip labels, all-zero values, print output content, fill=“auto” equivalence, invalid fill expression.</li>
+<li>625 tests total, R CMD check 0/0/0.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.5.0" id="ggsunburstr-050">ggsunburstR 0.5.0<a class="anchor" aria-label="anchor" href="#ggsunburstr-050"></a></h2>
 <div class="section level3">

@@ -40,7 +40,9 @@ icicle(
   - `"none"`: explicit static grey fill (same as `NULL`).
 
   - A column name: either bare (`fill = depth`) or quoted
-    (`fill = "depth"`).
+    (`fill = "depth"`). In a future version, the default may change from
+    `NULL` (static grey) to `"auto"` (depth mapping). Use `"none"` for
+    an explicit static grey fill that will not change.
 
 - colour:
 
@@ -84,6 +86,15 @@ icicle(
 
 A `ggplot` object with `scale_y_reverse()` and `theme_void()`.
 
+## See also
+
+[`sunburst_data()`](https://anttirask.github.io/ggsunburstR/reference/sunburst_data.md)
+for data preparation,
+[`sunburst()`](https://anttirask.github.io/ggsunburstR/reference/sunburst.md)
+for polar layouts,
+[`donut()`](https://anttirask.github.io/ggsunburstR/reference/donut.md)
+for ring charts.
+
 ## Examples
 
 ``` r
@@ -92,4 +103,7 @@ icicle(sb)
 
 icicle(sb, fill = "depth")
 
+if (FALSE) { # \dontrun{
+icicle(sb, fill = "depth", show_labels = TRUE, label_repel = TRUE)
+} # }
 ```

@@ -17,4 +17,4 @@ Useful links:
 
 ## Author
 
-**Maintainer**: Antti Rask <antti@rask.fi>
+**Maintainer**: Antti Rask <anttilennartrask@gmail.com>

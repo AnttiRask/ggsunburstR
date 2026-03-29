@@ -9,7 +9,7 @@ ggplot2::geom_rect() with coord_polar() and theme_void()."><meta property="og:im
 
     <a class="navbar-brand me-2" href="../index.html">ggsunburstR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -70,7 +70,10 @@ ggplot2::geom_rect() with coord_polar() and theme_void()."><meta property="og:im
 <li><p><code>"auto"</code>: maps fill to the <code>depth</code> column.</p></li>
 <li><p><code>"none"</code>: explicit static grey fill (same as <code>NULL</code>).</p></li>
 <li><p>A column name: either bare (<code>fill = depth</code>) or quoted
-(<code>fill = "depth"</code>).</p></li>
+(<code>fill = "depth"</code>).
+In a future version, the default may change from <code>NULL</code> (static
+grey) to <code>"auto"</code> (depth mapping). Use <code>"none"</code> for an
+explicit static grey fill that will not change.</p></li>
 </ul></dd>
 
 
@@ -121,6 +124,11 @@ label clutter on sunbursts. Default <code>FALSE</code>.</p></dd>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>A <code>ggplot</code> object with <code>coord_polar()</code> and <code>theme_void()</code>.</p>
     </div>
+    <div class="section level2">
+    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
+    <div class="dont-index"><p><code><a href="sunburst_data.html">sunburst_data()</a></code> for data preparation, <code><a href="icicle.html">icicle()</a></code> for
+rectangular layouts, <code><a href="donut.html">donut()</a></code> for ring charts.</p></div>
+    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
@@ -129,8 +137,10 @@ label clutter on sunbursts. Default <code>FALSE</code>.</p></dd>
 <span class="r-plt img"><img src="sunburst-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="fu">sunburst</span><span class="op">(</span><span class="va">sb</span>, fill <span class="op">=</span> <span class="st">"depth"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="sunburst-2.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span><span class="fu">sunburst</span><span class="op">(</span><span class="va">sb</span>, show_labels <span class="op">=</span> <span class="cn">TRUE</span>, label_type <span class="op">=</span> <span class="st">"perpendicular"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">sunburst</span><span class="op">(</span><span class="va">sb</span>, fill <span class="op">=</span> <span class="va">depth</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="sunburst-3.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span><span class="fu">sunburst</span><span class="op">(</span><span class="va">sb</span>, show_labels <span class="op">=</span> <span class="cn">TRUE</span>, label_type <span class="op">=</span> <span class="st">"perpendicular"</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="sunburst-4.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

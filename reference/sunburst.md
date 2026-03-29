@@ -40,7 +40,9 @@ sunburst(
   - `"none"`: explicit static grey fill (same as `NULL`).
 
   - A column name: either bare (`fill = depth`) or quoted
-    (`fill = "depth"`).
+    (`fill = "depth"`). In a future version, the default may change from
+    `NULL` (static grey) to `"auto"` (depth mapping). Use `"none"` for
+    an explicit static grey fill that will not change.
 
 - colour:
 
@@ -89,6 +91,15 @@ sunburst(
 
 A `ggplot` object with `coord_polar()` and `theme_void()`.
 
+## See also
+
+[`sunburst_data()`](https://anttirask.github.io/ggsunburstR/reference/sunburst_data.md)
+for data preparation,
+[`icicle()`](https://anttirask.github.io/ggsunburstR/reference/icicle.md)
+for rectangular layouts,
+[`donut()`](https://anttirask.github.io/ggsunburstR/reference/donut.md)
+for ring charts.
+
 ## Examples
 
 ``` r
@@ -96,6 +107,8 @@ sb <- sunburst_data("((a, b, c), (d, e));")
 sunburst(sb)
 
 sunburst(sb, fill = "depth")
+
+sunburst(sb, fill = depth)
 
 sunburst(sb, show_labels = TRUE, label_type = "perpendicular")
 

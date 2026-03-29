@@ -81,6 +81,19 @@ ggtree(
 
 A `ggplot` object.
 
+## Details
+
+Three layout modes are available:
+
+- Horizontal dendrogram (default): `rotate = TRUE, polar = FALSE`. Root
+  at left, leaves at right.
+
+- Vertical dendrogram: `rotate = FALSE, polar = FALSE`. Root at top,
+  leaves at bottom.
+
+- Circular (radial) tree: `polar = TRUE`. Root at centre, leaves around
+  circumference with leader lines and rotated labels.
+
 ## Note
 
 The Bioconductor package `ggtree` also exports a `ggtree()` function. If
