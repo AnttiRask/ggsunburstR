@@ -53,7 +53,7 @@ tile <- function(p, sb, variables, y_offset = 0, tile_height = 1,
   # Validate variables exist
   for (var in variables) {
     if (!var %in% names(sb$rects)) {
-      abort("Column '{var}' not found in sunburst data.")
+      cli::cli_abort("Column {.val {var}} not found in sunburst data.")
     }
   }
 

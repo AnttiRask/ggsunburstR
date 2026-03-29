@@ -35,12 +35,12 @@ drilldown <- function(sb, node, ...) {
  if (is.character(node) && length(node) == 1) {
     node_id <- find_node_by_name(tree, node)
     if (is.null(node_id)) {
-      abort("Node '{node}' not found in tree.")
+      cli::cli_abort("Node {.val {node}} not found in tree.")
     }
   } else if (is.numeric(node) && length(node) == 1) {
     node_id <- as.integer(node)
     if (node_id < 1 || node_id > length(tree$nodes)) {
-      abort("Node ID {node_id} out of range.")
+      cli::cli_abort("Node ID {node_id} out of range.")
     }
   } else {
     abort("'node' must be a single character name or integer ID.")
@@ -55,7 +55,7 @@ drilldown <- function(sb, node, ...) {
   # Leaf check
   if (length(tree$children[[node_id]]) == 0) {
     node_name <- tree$nodes[[node_id]]$name
-    abort("Cannot drill down into a leaf node ('{node_name}' has no children).")
+    cli::cli_abort("Cannot drill down into a leaf node ({.val {node_name}} has no children).")
   }
 
   # Extract subtree

@@ -21,10 +21,10 @@ parse_dataframe <- function(df) {
   }
 
   if (!"parent" %in% names(df) || is.null(child_col)) {
-    abort(
-      "Input data.frame must have 'parent' and 'child' (or 'node') columns.",
+    cli::cli_abort(c(
+      "Input data.frame must have {.val parent} and {.val child} (or {.val node}) columns.",
       i = "Found columns: {.val {orig_names}}."
-    )
+    ))
   }
 
   extra_cols <- setdiff(names(df), c("parent", child_col))

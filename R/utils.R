@@ -84,7 +84,7 @@ vjust_rtext <- function(angle) {
 .validate_fill <- function(fill, rects) {
   if (is.null(fill) || fill %in% c("auto", "none")) return(invisible())
   if (!fill %in% names(rects)) {
-    rlang::abort(paste0("Column '", fill, "' not found in sunburst data."))
+    cli::cli_abort("Column {.val {fill}} not found in sunburst data.")
   }
 }
 

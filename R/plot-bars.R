@@ -49,10 +49,10 @@ bars <- function(p, sb, variables, y_offset = 0, bar_height = 1,
   # Validate variables exist and are numeric
   for (var in variables) {
     if (!var %in% names(sb$rects)) {
-      abort("Column '{var}' not found in sunburst data.")
+      cli::cli_abort("Column {.val {var}} not found in sunburst data.")
     }
     if (!is.numeric(sb$rects[[var]])) {
-      abort("Column '{var}' must be numeric for bar display.")
+      cli::cli_abort("Column {.val {var}} must be numeric for bar display.")
     }
   }
 

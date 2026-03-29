@@ -72,10 +72,10 @@ sunburst_data <- function(input, type = "auto", values = NULL,
     node_parent = parse_node_parent(input,
                                     sep = if (is.null(sep)) "," else sep),
     dataframe = parse_dataframe(input),
-    abort(
+    cli::cli_abort(c(
       "Unknown input type: {.val {type}}.",
-      i = "Use 'newick', 'phylo', 'datatree', 'paths', 'lineage', 'node_parent', or 'dataframe'."
-    )
+      i = "Use {.or {.val {c('newick', 'phylo', 'datatree', 'paths', 'lineage', 'node_parent', 'dataframe')}}}."
+    ))
   )
 
   # --- Handle values parameter ---
@@ -163,7 +163,7 @@ sunburst_data <- function(input, type = "auto", values = NULL,
       col_lower <- tolower(names(input))
       match_idx <- which(col_lower == tolower(col_name))
       if (length(match_idx) == 0) {
-        abort("Column '{col_name}' not found in input data.")
+        cli::cli_abort("Column {.val {col_name}} not found in input data.")
       }
       # Build named vector: node name → value
       child_col <- if ("child" %in% tolower(names(input))) {

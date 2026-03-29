@@ -79,16 +79,14 @@ icicle_multifill <- function(sb, fills, colour = "white",
   for (depth_str in names(fills)) {
     depth_val <- suppressWarnings(as.integer(depth_str))
     if (is.na(depth_val) || !depth_val %in% available_depths) {
-      rlang::abort(paste0(
-        "depth '", depth_str, "' not found in data. ",
-        "Available depths: ", paste(sort(available_depths), collapse = ", ")
+      cli::cli_abort(c(
+        "Depth {.val {depth_str}} not found in data.",
+        i = "Available depths: {sort(available_depths)}."
       ))
     }
     fill_col <- fills[[depth_str]]
     if (!fill_col %in% names(sb$rects)) {
-      rlang::abort(paste0(
-        "Column '", fill_col, "' not found in sunburst data."
-      ))
+      cli::cli_abort("Column {.val {fill_col}} not found in sunburst data.")
     }
   }
 }

@@ -10,10 +10,10 @@ parse_node_parent <- function(infile, sep = ",") {
   names(df) <- tolower(trimws(gsub("^[\"']|[\"']$", "", names(df))))
 
   if (!all(c("node", "parent") %in% names(df))) {
-    abort(
-      "First line must contain 'node' and 'parent' columns.",
+    cli::cli_abort(c(
+      "First line must contain {.val node} and {.val parent} columns.",
       i = "Found columns: {.val {names(df)}}."
-    )
+    ))
   }
 
   tree <- new_tree()

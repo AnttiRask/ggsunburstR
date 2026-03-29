@@ -59,7 +59,7 @@ sunburst <- function(sb, fill = NULL, colour = "white", linewidth = 0.2,
   # label_repel is icicle-only in v0.4 — polar repulsion deferred
 
   if (isTRUE(label_repel)) {
-    abort(c(
+    cli::cli_abort(c(
       "Label repulsion is not supported for polar (sunburst) plots in this version.",
       "i" = "Use {.arg min_label_angle} to filter labels on narrow sectors.",
       "i" = "Use {.fun icicle} for plots with label repulsion."
