@@ -96,9 +96,5 @@ test_that("plot.sunburst_data() exists as a method", {
 
 test_that("print.sunburst_data() output contains expected content", {
   sb <- make_test_sb()
-  # cli output may go to stdout or message stream depending on environment
-  out_stdout <- capture.output(print(sb), type = "output")
-  out_msg <- capture.output(print(sb), type = "message")
-  out_text <- paste(c(out_stdout, out_msg), collapse = " ")
-  expect_true(grepl("3 node", out_text) || grepl("Sunburst", out_text))
+  expect_message(print(sb), "3 node|Sunburst")
 })
