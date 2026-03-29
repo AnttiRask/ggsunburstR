@@ -10,6 +10,9 @@
 #'   - `"none"`: explicit static grey fill (same as `NULL`).
 #'   - A column name: either bare (`fill = depth`) or quoted
 #'     (`fill = "depth"`).
+#'   In a future version, the default may change from `NULL` (static
+#'   grey) to `"auto"` (depth mapping). Use `"none"` for an
+#'   explicit static grey fill that will not change.
 #' @param colour Border colour for rectangles. Default `"white"`.
 #' @param linewidth Border line width. Default `0.2`.
 #' @param show_labels Whether to add text labels for leaf nodes.
@@ -29,10 +32,14 @@
 #'
 #' @return A `ggplot` object with `coord_polar()` and `theme_void()`.
 #'
+#' @seealso [sunburst_data()] for data preparation, [icicle()] for
+#'   rectangular layouts, [donut()] for ring charts.
+#'
 #' @examples
 #' sb <- sunburst_data("((a, b, c), (d, e));")
 #' sunburst(sb)
 #' sunburst(sb, fill = "depth")
+#' sunburst(sb, fill = depth)
 #' sunburst(sb, show_labels = TRUE, label_type = "perpendicular")
 #'
 #' @export

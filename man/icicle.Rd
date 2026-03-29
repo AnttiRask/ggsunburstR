@@ -27,6 +27,9 @@ icicle(
 \item \code{"none"}: explicit static grey fill (same as \code{NULL}).
 \item A column name: either bare (\code{fill = depth}) or quoted
 (\code{fill = "depth"}).
+In a future version, the default may change from \code{NULL} (static
+grey) to \code{"auto"} (depth mapping). Use \code{"none"} for an
+explicit static grey fill that will not change.
 }}
 
 \item{colour}{Border colour for rectangles. Default \code{"white"}.}
@@ -61,5 +64,12 @@ object using \code{ggplot2::geom_rect()} with \code{scale_y_reverse()} and
 sb <- sunburst_data("((a, b, c), (d, e));")
 icicle(sb)
 icicle(sb, fill = "depth")
+\dontrun{
+icicle(sb, fill = "depth", show_labels = TRUE, label_repel = TRUE)
+}
 
+}
+\seealso{
+\code{\link[=sunburst_data]{sunburst_data()}} for data preparation, \code{\link[=sunburst]{sunburst()}} for
+polar layouts, \code{\link[=donut]{donut()}} for ring charts.
 }

@@ -55,6 +55,17 @@ A \code{ggplot} object.
 Creates a classical node-link tree diagram (dendrogram) using
 \code{geom_segment()} from the segment data in a \code{sunburst_data} object.
 }
+\details{
+Three layout modes are available:
+\itemize{
+\item Horizontal dendrogram (default): \code{rotate = TRUE, polar = FALSE}.
+Root at left, leaves at right.
+\item Vertical dendrogram: \code{rotate = FALSE, polar = FALSE}.
+Root at top, leaves at bottom.
+\item Circular (radial) tree: \code{polar = TRUE}. Root at centre,
+leaves around circumference with leader lines and rotated labels.
+}
+}
 \note{
 The Bioconductor package \code{ggtree} also exports a \code{ggtree()}
 function. If both packages are loaded, use \code{ggsunburstR::ggtree()}

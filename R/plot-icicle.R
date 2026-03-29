@@ -11,6 +11,9 @@
 #'   - `"none"`: explicit static grey fill (same as `NULL`).
 #'   - A column name: either bare (`fill = depth`) or quoted
 #'     (`fill = "depth"`).
+#'   In a future version, the default may change from `NULL` (static
+#'   grey) to `"auto"` (depth mapping). Use `"none"` for an
+#'   explicit static grey fill that will not change.
 #' @param colour Border colour for rectangles. Default `"white"`.
 #' @param linewidth Border line width. Default `0.2`.
 #' @param show_labels Whether to add text labels. Default `FALSE`.
@@ -26,10 +29,16 @@
 #'
 #' @return A `ggplot` object with `scale_y_reverse()` and `theme_void()`.
 #'
+#' @seealso [sunburst_data()] for data preparation, [sunburst()] for
+#'   polar layouts, [donut()] for ring charts.
+#'
 #' @examples
 #' sb <- sunburst_data("((a, b, c), (d, e));")
 #' icicle(sb)
 #' icicle(sb, fill = "depth")
+#' \dontrun{
+#' icicle(sb, fill = "depth", show_labels = TRUE, label_repel = TRUE)
+#' }
 #'
 #' @export
 icicle <- function(sb, fill = NULL, colour = "white", linewidth = 0.2,
