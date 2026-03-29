@@ -45,7 +45,7 @@ ggtree(sb)
 
 ## Input formats
 
-ggsunburstR accepts seven input formats:
+ggsunburstR accepts nine input formats:
 
 ```r
 # 1. Newick string
@@ -67,11 +67,17 @@ sb <- sunburst_data(c("A/B/C", "A/B/D", "A/E"))
 # 5. Data frame with path column
 sb <- sunburst_data(data.frame(path = c("A/B/C", "A/B/D")))
 
-# 6. ape::phylo object
+# 6. Lineage file (tab-separated root-to-leaf paths)
+sb <- sunburst_data("path/to/lineage.tsv", type = "lineage")
+
+# 7. Node-parent CSV file
+sb <- sunburst_data("path/to/data.csv", type = "node_parent")
+
+# 8. ape::phylo object
 phylo <- ape::read.tree(text = "(A, B, C);")
 sb <- sunburst_data(phylo)
 
-# 7. data.tree::Node object
+# 9. data.tree::Node object
 root <- data.tree::Node$new("root")
 root$AddChild("A")
 root$AddChild("B")
@@ -183,6 +189,24 @@ p <- sunburst(sb, fill = "depth")
 highlight_nodes(p, nodes = c("a", "c"), fill = "red")
 ```
 
+## Fill options
+
+The `fill` parameter accepts column names (quoted or bare), plus special
+values:
+
+```r
+sb <- sunburst_data("((a, b, c), (d, e, f));")
+
+# Bare name (tidy eval)
+sunburst(sb, fill = depth)
+
+# Auto-map to depth
+sunburst(sb, fill = "auto")
+
+# Explicit static grey (no mapping)
+sunburst(sb, fill = "none")
+```
+
 ## Customisation
 
 The output is a standard ggplot2 object:
@@ -192,7 +216,8 @@ sb <- sunburst_data("((a, b, c), (d, e, f));")
 
 sunburst(sb, fill = "name") +
   ggplot2::scale_fill_brewer(palette = "Set3") +
-  ggplot2::labs(title = "My Sunburst")
+  ggplot2::labs(title = "My Sunburst") +
+  theme_sunburst()
 ```
 
 ## License
