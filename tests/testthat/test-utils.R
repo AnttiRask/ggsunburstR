@@ -11,8 +11,9 @@ test_that("rangle() leaves right-side angles unchanged", {
 test_that("rangle() flips left-side angles by 180", {
   expect_equal(rangle(180), 360)  # cos(180°) = -1, so flip
   expect_equal(rangle(225), 405)
-  # 270° is a boundary case: cos(270°) ≈ 0 (floating point may be < 0)
-  expect_true(rangle(270) %in% c(270, 450))
+  # 270°: cos(270° * pi / 180) ≈ -5.5e-17 (negative in floating point),
+  # so rangle() flips it to 450
+  expect_equal(rangle(270), 450)
 })
 
 # --- pangle() ---
