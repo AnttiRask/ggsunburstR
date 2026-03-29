@@ -27,7 +27,7 @@ objects you can customise freely.
 The workflow has two steps:
 
 1. **Prepare data** with `sunburst_data()`
-2. **Plot** with `sunburst()` or `icicle()`
+2. **Plot** with `sunburst()`, `icicle()`, `donut()`, or `ggtree()`
 
 ```{r basic}
 library(ggsunburstR)
@@ -68,10 +68,39 @@ sb <- sunburst_data(df)
 sunburst(sb, fill = "name")
 ```
 
-### Files
+### Path-delimited strings
 
-ggsunburstR can read Newick files, node-parent CSVs, and lineage TSVs
-directly by passing a file path.
+Hierarchies can also be expressed as slash-delimited paths:
+
+```{r paths}
+sb <- sunburst_data(c("A/B/C", "A/B/D", "A/E/F"))
+sunburst(sb, fill = "name")
+```
+
+### Other formats
+
+ggsunburstR also accepts Newick files, node-parent CSVs, lineage TSVs,
+`ape::phylo` objects, and `data.tree::Node` objects. See `?sunburst_data`
+for details.
+
+## Plot types
+
+### Donut charts
+
+A donut is a sunburst restricted to the outermost depth levels:
+
+```{r donut}
+sb <- sunburst_data("((a, b, c), (d, e, f));")
+donut(sb, fill = "name", levels = 1, hole_size = 2)
+```
+
+### Tree dendrograms
+
+`ggtree()` renders the tree as a dendrogram:
+```{r ggtree}
+sb <- sunburst_data("((a:0.3, b:0.5)X:0.2, (c:0.4, d:0.1)Y:0.3)root;")
+ggtree(sb, show_labels = TRUE)
+```
 
 ## Value-weighted sectors
 
@@ -86,20 +115,26 @@ sb <- sunburst_data(
 sunburst(sb, fill = "name")
 ```
 
-## Customisation with ggplot2
+## Fill mapping
 
-Since the output is a standard ggplot2 object, you can add any ggplot2
-layer or theme:
+The `fill` parameter accepts column names (quoted or bare), plus the
+special values `"auto"` (maps to depth) and `"none"` (static grey):
 
-```{r custom}
+```{r fill-auto}
 sb <- sunburst_data("((a, b, c), (d, e, f));")
-sunburst(sb, fill = "name") +
-  ggplot2::scale_fill_brewer(palette = "Set2") +
-  ggplot2::labs(title = "Custom sunburst") +
-  ggplot2::theme(legend.position = "bottom")
+
+# Bare name (tidy eval)
+sunburst(sb, fill = depth)
+```
+
+```{r fill-name}
+# Auto-map to depth
+sunburst(sb, fill = "auto")
 ```
 
 ## Labels
+
+### Basic labels
 
 Add leaf labels with `show_labels = TRUE`:
 
@@ -137,6 +172,58 @@ sb <- sunburst_data("((a, b, c, d, e), (f, g, h));")
 icicle(sb, fill = "depth", show_labels = TRUE, label_repel = TRUE)
 ```
 
+## Drilldown into subtrees
+
+Zoom into a specific branch with `drilldown()`:
+
+```{r drilldown}
+sb <- sunburst_data("((a, b)X, (c, d)Y)root;")
+sub <- drilldown(sb, node = "X")
+sunburst(sub, fill = "name")
+```
+
+## Annotations
+
+### Bar chart annotations
+
+Add bar charts adjacent to leaf nodes:
+
+```{r bars}
+df <- data.frame(
+  parent = c(NA, "root", "root", "root"),
+  child  = c("root", "A", "B", "C"),
+  score  = c(NA, 0.5, 0.9, 0.3)
+)
+sb <- sunburst_data(df)
+p <- icicle(sb, fill = "name")
+bars(p, sb, variables = "score")
+```
+
+### Tile (heatmap) annotations
+
+Add colour-coded tiles adjacent to leaf nodes:
+
+```{r tile}
+df <- data.frame(
+  parent = c(NA, "root", "root", "root"),
+  child  = c("root", "A", "B", "C"),
+  group  = c(NA, "x", "y", "x")
+)
+sb <- sunburst_data(df)
+p <- icicle(sb, fill = "name")
+tile(p, sb, variables = "group")
+```
+
+## Highlight specific nodes
+
+Emphasise nodes by name or ID:
+
+```{r highlight}
+sb <- sunburst_data("((a, b, c), (d, e));")
+p <- sunburst(sb, fill = "depth")
+highlight_nodes(p, nodes = c("a", "c"), fill = "red")
+```
+
 ## Per-depth fill scales
 
 Use `sunburst_multifill()` or `icicle_multifill()` to map different
@@ -145,6 +232,45 @@ colour scales to different hierarchy levels:
 ```{r multifill, eval = requireNamespace("ggnewscale", quietly = TRUE)}
 sb <- sunburst_data("((a, b)X, (c, d)Y)root;")
 sunburst_multifill(sb, fills = list("1" = "name", "2" = "name"))
+```
+
+## ggplot2 geom
+
+For idiomatic ggplot2 syntax, use `geom_sunburst()` directly with a
+data.frame:
+
+```{r geom-sunburst}
+df <- data.frame(
+  parent = c(NA, "root", "root", "A", "A"),
+  child  = c("root", "A", "B", "a1", "a2"),
+  group  = c("r", "g1", "g2", "g1", "g1")
+)
+
+ggplot2::ggplot(df) +
+  geom_sunburst(ggplot2::aes(id = child, parent = parent, fill = group)) +
+  ggplot2::coord_polar() +
+  theme_sunburst()
+```
+
+## Tree inspection
+
+Use `nw_print()` to inspect tree structure:
+
+```{r nw-print}
+nw_print("((a, b)X, (c, d)Y)root;")
+```
+
+## Customisation with ggplot2
+
+Since the output is a standard ggplot2 object, you can add any ggplot2
+layer or theme:
+
+```{r custom}
+sb <- sunburst_data("((a, b, c), (d, e, f));")
+sunburst(sb, fill = "name") +
+  ggplot2::scale_fill_brewer(palette = "Set2") +
+  ggplot2::labs(title = "Custom sunburst") +
+  theme_sunburst()
 ```
 
 ## Options
