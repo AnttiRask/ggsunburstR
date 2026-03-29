@@ -15,11 +15,9 @@ StatSunburst <- ggplot2::ggproto("StatSunburst", ggplot2::Stat,
   # Declare stat-specific params so layer() doesn't warn about them
   extra_params = c("na.rm", "values", "branchvalues", "leaf_mode"),
 
-
   # Replace NA parent with sentinel before remove_missing runs.
   # The root row has parent = NA which triggers ggplot2 warnings.
-  # Note: "__ROOT__" is a reserved sentinel — user data must not
-
+  # Note: "__ROOT__" is a reserved sentinel -- user data must not
   # contain a node with this exact name.
   setup_data = function(data, params) {
     data$parent[is.na(data$parent)] <- "__ROOT__"

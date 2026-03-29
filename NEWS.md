@@ -33,7 +33,7 @@
   duplicate paths, non-scalar data.tree fields, deep tree (20 levels),
   xlim < 360 labels, tibble input, duplicate tip labels, all-zero values,
   print output content, fill="auto" equivalence, invalid fill expression.
-* 626 tests total, R CMD check 0/0/0.
+* 625 tests total, R CMD check 0/0/0.
 
 # ggsunburstR 0.5.0
 
