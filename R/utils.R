@@ -36,6 +36,50 @@ vjust_rtext <- function(angle) {
   0.5
 }
 
+# Safely read a Newick string or file via ape::read.tree().
+# Captures warnings from ape and re-emits them after a successful parse.
+# On failure (error or NULL result), aborts with an informative message.
+# Returns an ape::phylo object.
+.read_newick_safe <- function(input) {
+  captured_warnings <- list()
+  phylo <- tryCatch(
+    withCallingHandlers(
+      {
+        if (file.exists(input)) {
+          ape::read.tree(file = input)
+        } else {
+          ape::read.tree(text = input)
+        }
+      },
+      warning = function(w) {
+        captured_warnings[[length(captured_warnings) + 1L]] <<- w
+        invokeRestart("muffleWarning")
+      }
+    ),
+    error = function(e) {
+      abort(
+        "Failed to parse Newick input.",
+        i = "Check that the input is valid Newick format.",
+        parent = e
+      )
+    }
+  )
+
+  if (is.null(phylo)) {
+    abort(
+      "Failed to parse Newick input.",
+      i = "Check that the input is valid Newick format."
+    )
+  }
+
+  # Re-emit any warnings from ape on successful parse
+  for (w in captured_warnings) {
+    warn(conditionMessage(w))
+  }
+
+  phylo
+}
+
 # Resolve the fill quosure to a string or NULL.
 # Handles: NULL, bare names (symbols), and string literals.
 # Must be called with a quosure captured by rlang::enquo() in the

@@ -16,45 +16,9 @@
 #'
 #' @export
 nw_print <- function(newick, ladderize = FALSE, ultrametric = FALSE) {
-  # Parse via ape — reuse the same warning-capture pattern as parse_newick
-  captured_warnings <- list()
-  phylo <- tryCatch(
-    withCallingHandlers(
-      {
-        if (file.exists(newick)) {
-          ape::read.tree(file = newick)
-        } else {
-          ape::read.tree(text = newick)
-        }
-      },
-      warning = function(w) {
-        captured_warnings[[length(captured_warnings) + 1L]] <<- w
-        invokeRestart("muffleWarning")
-      }
-    ),
-    error = function(e) {
-      abort(
-        "Failed to parse Newick input.",
-        i = "Check that the input is valid Newick format.",
-        parent = e
-      )
-    }
-  )
-
-  if (is.null(phylo)) {
-    abort(
-      "Failed to parse Newick input.",
-      i = "Check that the input is valid Newick format."
-    )
-  }
-
-  # Re-emit warnings from successful parse
-  for (w in captured_warnings) {
-    warn(conditionMessage(w))
-  }
+  phylo <- .read_newick_safe(newick)
 
   # Optional transforms via ape directly
-
   if (!identical(ladderize, FALSE)) {
     right <- !(ladderize %in% c("L", "LEFT", "left", "Left"))
     phylo <- ape::ladderize(phylo, right = right)
