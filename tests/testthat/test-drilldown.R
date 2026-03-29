@@ -191,7 +191,9 @@ test_that("drilldown() stores drilldown_from in params", {
   parent_id <- tree$parent[a_id]
 
   sb_sub <- drilldown(sb, node = parent_id)
-  expect_equal(attr(sb_sub, "params")$drilldown_from, parent_id)
+  # drilldown_from always stores the node name (normalised from ID)
+  parent_name <- tree$nodes[[parent_id]]$name
+  expect_equal(attr(sb_sub, "params")$drilldown_from, parent_name)
 })
 
 # --- ... overrides ---

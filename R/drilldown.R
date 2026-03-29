@@ -32,7 +32,7 @@ drilldown <- function(sb, node, ...) {
   params <- attr(sb, "params")
 
   # Resolve node to node_id
- if (is.character(node) && length(node) == 1) {
+  if (is.character(node) && length(node) == 1) {
     node_id <- find_node_by_name(tree, node)
     if (is.null(node_id)) {
       cli::cli_abort("Node {.val {node}} not found in tree.")
@@ -66,7 +66,8 @@ drilldown <- function(sb, node, ...) {
   for (nm in names(overrides)) {
     merged[[nm]] <- overrides[[nm]]
   }
-  merged$drilldown_from <- node
+  # Always store the node name (not ID) for consistency
+  merged$drilldown_from <- tree$nodes[[node_id]]$name
 
   # Recompute: sizes
   subtree <- assign_sizes(subtree, values = merged$values,
