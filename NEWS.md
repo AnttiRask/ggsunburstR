@@ -1,3 +1,40 @@
+# ggsunburstR 0.5.1
+
+## Error messages
+
+* All error messages with variable interpolation now use
+  `cli::cli_abort()` for proper rendering. Affected functions:
+  `drilldown()`, `bars()`, `tile()`, `sunburst_multifill()`,
+  `icicle_multifill()`, and internal validators.
+
+## Code quality
+
+* Extracted shared `.read_newick_safe()` helper -- eliminates duplicated
+  Newick parsing logic between `parse_newick()` and `nw_print()`.
+* `compute_coordinates()` now guards against all-zero leaf sizes with an
+  informative error instead of silent division by zero.
+* `drilldown()` `params$drilldown_from` now always stores the node name
+  (previously stored mixed types depending on how node was specified).
+* Fixed 1-space indent in `drilldown.R`.
+* Pinned `rangle(270)` test to exact expected value.
+
+## Documentation
+
+* Added `@seealso` cross-references to `sunburst()`, `icicle()`.
+* Added `@details` to `ggtree()` documenting three layout modes.
+* Added bare name fill example to `sunburst()` roxygen2 examples.
+* Added `label_repel` example to `icicle()` roxygen2 examples.
+* Added deprecation plan note for `fill = NULL` in `sunburst()` and
+  `icicle()` docs.
+
+## Testing
+
+* Added 21 edge-case tests: single-leaf bars/tile, empty/malformed paths,
+  duplicate paths, non-scalar data.tree fields, deep tree (20 levels),
+  xlim < 360 labels, tibble input, duplicate tip labels, all-zero values,
+  print output content, fill="auto" equivalence, invalid fill expression.
+* 626 tests total, R CMD check 0/0/0.
+
 # ggsunburstR 0.5.0
 
 ## ggplot2 geom
