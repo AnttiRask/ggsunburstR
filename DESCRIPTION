@@ -9,7 +9,7 @@ Description: Create sunburst and icicle adjacency diagrams using ggplot2.
 Version: 0.5.1
 Authors@R: c(
     person("Antti", "Rask", role = c("aut", "cre"),
-           email = "antti@rask.fi")
+           email = "anttilennartrask@gmail.com")
     )
 License: MIT + file LICENSE
 URL: https://github.com/AnttiRask/ggsunburstR

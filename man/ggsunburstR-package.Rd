@@ -19,7 +19,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Antti Rask \email{antti@rask.fi}
+\strong{Maintainer}: Antti Rask \email{anttilennartrask@gmail.com}
 
 }
 \keyword{internal}
