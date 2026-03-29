@@ -148,6 +148,30 @@ sunburst_multifill(sb, fills = list("1" = "name", "2" = "name"))
 icicle_multifill(sb, fills = list("1" = "name", "2" = "name"))
 ```
 
+## ggplot2 geom
+
+For idiomatic ggplot2 syntax, use
+[`geom_sunburst()`](https://anttirask.github.io/ggsunburstR/reference/geom_sunburst.md)
+directly with a data.frame:
+
+``` r
+df <- data.frame(
+  parent = c(NA, "root", "root", "A", "A"),
+  child  = c("root", "A", "B", "a1", "a2"),
+  group  = c("r", "g1", "g2", "g1", "g1")
+)
+
+# Icicle (Cartesian, default)
+ggplot2::ggplot(df) +
+  geom_sunburst(ggplot2::aes(id = child, parent = parent, fill = group))
+
+# Sunburst (add coord_polar)
+ggplot2::ggplot(df) +
+  geom_sunburst(ggplot2::aes(id = child, parent = parent, fill = group)) +
+  ggplot2::coord_polar() +
+  theme_sunburst()
+```
+
 ## Highlight specific nodes
 
 ``` r

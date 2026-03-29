@@ -1,5 +1,40 @@
 # Changelog
 
+## ggsunburstR 0.5.0
+
+### ggplot2 geom
+
+- [`geom_sunburst()`](https://anttirask.github.io/ggsunburstR/reference/geom_sunburst.md)
+  provides idiomatic ggplot2 syntax:
+  `ggplot(df) + geom_sunburst(aes(id = child, parent = parent))`. Uses a
+  custom `StatSunburst` ggproto to convert parent-child data.frames into
+  sunburst coordinates. Add `coord_polar()` for sunburst layout or leave
+  Cartesian for icicle. Supports `values`, `branchvalues`, and
+  `leaf_mode` parameters.
+
+### New theme
+
+- [`theme_sunburst()`](https://anttirask.github.io/ggsunburstR/reference/theme_sunburst.md)
+  provides a tailored theme for sunburst and donut charts: centred bold
+  title, bottom legend, tidy margins. Based on `theme_void()`.
+
+### Fill improvements
+
+- `fill = "auto"` maps fill to the `depth` column in
+  [`sunburst()`](https://anttirask.github.io/ggsunburstR/reference/sunburst.md),
+  [`icicle()`](https://anttirask.github.io/ggsunburstR/reference/icicle.md),
+  and
+  [`donut()`](https://anttirask.github.io/ggsunburstR/reference/donut.md).
+- `fill = "none"` explicitly produces static grey (escape hatch for when
+  the default eventually changes to `"auto"` in a future version).
+- Bare name support: `sunburst(sb, fill = depth)` now works alongside
+  the existing `fill = "depth"` string syntax.
+
+### Testing
+
+- Added 36 new tests (605 total).
+- R CMD check: 0 errors, 0 warnings, 0 notes.
+
 ## ggsunburstR 0.4.0
 
 ### Label enhancements

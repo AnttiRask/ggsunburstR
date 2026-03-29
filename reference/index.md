@@ -22,6 +22,20 @@ Create sunburst, icicle, donut, and tree plots
 - [`ggtree()`](https://anttirask.github.io/ggsunburstR/reference/ggtree.md)
   : Create a tree-style dendrogram plot
 
+## ggplot2 geom
+
+Idiomatic ggplot2 layer for sunburst/icicle plots
+
+- [`geom_sunburst()`](https://anttirask.github.io/ggsunburstR/reference/geom_sunburst.md)
+  : Sunburst layer for ggplot2
+
+## Themes
+
+Custom themes for sunburst plots
+
+- [`theme_sunburst()`](https://anttirask.github.io/ggsunburstR/reference/theme_sunburst.md)
+  : Sunburst theme
+
 ## Multi-scale fill
 
 Per-depth fill colour scales

@@ -33,7 +33,9 @@ donut(
 
 - fill:
 
-  Column name to map to fill aesthetic. `NULL` for static grey.
+  Fill mapping. Accepts bare names or strings. `NULL` or `"none"` for
+  static grey, `"auto"` for depth mapping, or a column name (bare or
+  quoted).
 
 - colour:
 

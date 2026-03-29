@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ggsunburstR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -29,9 +29,35 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/AnttiRask/ggsunburstR/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/AnttiRask/ggsunburstR/blob/v0.5.0/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.5.0" id="ggsunburstr-050">ggsunburstR 0.5.0<a class="anchor" aria-label="anchor" href="#ggsunburstr-050"></a></h2>
+<div class="section level3">
+<h3 id="ggplot2-geom-0-5-0">ggplot2 geom<a class="anchor" aria-label="anchor" href="#ggplot2-geom-0-5-0"></a></h3>
+<ul><li>
+<code><a href="../reference/geom_sunburst.html">geom_sunburst()</a></code> provides idiomatic ggplot2 syntax: <code>ggplot(df) + geom_sunburst(aes(id = child, parent = parent))</code>. Uses a custom <code>StatSunburst</code> ggproto to convert parent-child data.frames into sunburst coordinates. Add <code>coord_polar()</code> for sunburst layout or leave Cartesian for icicle. Supports <code>values</code>, <code>branchvalues</code>, and <code>leaf_mode</code> parameters.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="new-theme-0-5-0">New theme<a class="anchor" aria-label="anchor" href="#new-theme-0-5-0"></a></h3>
+<ul><li>
+<code><a href="../reference/theme_sunburst.html">theme_sunburst()</a></code> provides a tailored theme for sunburst and donut charts: centred bold title, bottom legend, tidy margins. Based on <code>theme_void()</code>.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="fill-improvements-0-5-0">Fill improvements<a class="anchor" aria-label="anchor" href="#fill-improvements-0-5-0"></a></h3>
+<ul><li>
+<code>fill = "auto"</code> maps fill to the <code>depth</code> column in <code><a href="../reference/sunburst.html">sunburst()</a></code>, <code><a href="../reference/icicle.html">icicle()</a></code>, and <code><a href="../reference/donut.html">donut()</a></code>.</li>
+<li>
+<code>fill = "none"</code> explicitly produces static grey (escape hatch for when the default eventually changes to <code>"auto"</code> in a future version).</li>
+<li>Bare name support: <code>sunburst(sb, fill = depth)</code> now works alongside the existing <code>fill = "depth"</code> string syntax.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="testing-0-5-0">Testing<a class="anchor" aria-label="anchor" href="#testing-0-5-0"></a></h3>
+<ul><li>Added 36 new tests (605 total).</li>
+<li>R CMD check: 0 errors, 0 warnings, 0 notes.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.4.0" id="ggsunburstr-040">ggsunburstR 0.4.0<a class="anchor" aria-label="anchor" href="#ggsunburstr-040"></a></h2>
 <div class="section level3">

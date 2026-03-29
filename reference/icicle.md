@@ -31,8 +31,16 @@ icicle(
 
 - fill:
 
-  Column name in `sb$rects` to map to fill aesthetic. When `NULL`, a
-  static grey fill is used.
+  Fill mapping. Accepts bare names or strings. One of:
+
+  - `NULL` (default): static grey fill (no aesthetic mapping).
+
+  - `"auto"`: maps fill to the `depth` column.
+
+  - `"none"`: explicit static grey fill (same as `NULL`).
+
+  - A column name: either bare (`fill = depth`) or quoted
+    (`fill = "depth"`).
 
 - colour:
 
